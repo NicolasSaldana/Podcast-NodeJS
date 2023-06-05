@@ -11,11 +11,13 @@ require('dotenv').config();
 
 const app = express();
 const port = 3000
+
+app.use("/assets", express.static(path.join(__dirname, "/assets")))
+app.set('views', path.join(__dirname, "/views"))
 app.set('view engine', 'ejs');
-app.use(express.static('public')); // Directorio estático para los archivos CSS
-app.use(cors())
+app.use(cors());
 
-
+app.use(express.static(__dirname + 'href="/css/style.css">'));
 //Config de la BD
 // Configurar la conexión a la base de datos
 const db = mysql.createConnection({
