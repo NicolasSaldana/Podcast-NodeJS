@@ -15,6 +15,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public')); // Directorio estático para los archivos CSS
 app.use(cors())
 
+
 //Config de la BD
 // Configurar la conexión a la base de datos
 const db = mysql.createConnection({
