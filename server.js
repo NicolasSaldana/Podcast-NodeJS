@@ -7,9 +7,12 @@ const cors = require('cors')
 const path = require('path')
 require('dotenv').config();
 
+// Resto de tu configuración y rutas...
+
 const app = express();
 const port = 3000
-
+app.set('view engine', 'ejs');
+app.use(express.static('public')); // Directorio estático para los archivos CSS
 app.use(cors())
 
 //Config de la BD
@@ -117,29 +120,33 @@ app.post('/valid-user', (req, res) => {
 });
 app.post('/sub-email', (req, res) => {
   const { subemail } = req.body; // Obtener el valor del campo 'subemail' del cuerpo de la solicitud
-  const sql = 'SELECT * FROM subemail WHERE email = ?'; // Consulta SQL para buscar registros en la tabla 'subemail' donde el campo 'email' sea igual al valor proporcionado
-  db.query(sql, [subemail], (err, result) => { // Ejecutar la consulta SQL con el valor 'subemail' como parámetro
-    if (err) { // Si ocurre un error durante la consulta
-      console.error('Error al verificar usuario:', err); // Mostrar un mensaje de error en la consola
-      res.status(500).json({ error: 'Error al verificar usuario' }); // Enviar una respuesta de error al cliente con código de estado 500 y un objeto JSON que indica el error
-    } else { // Si la consulta se ejecuta correctamente
-      if (result.length > 0) { // Si se encuentra al menos un registro en el resultado de la consulta
-        res.status(400).json({ error: 'El correo electrónico ya existe' }); // Enviar una respuesta al cliente con código de estado 400 y un objeto JSON indicando que el 'subemail' no es válido (ya existe en la tabla)
-      } else { // Si no se encuentra ningún registro en el resultado de la consulta
-        const insertSql = 'INSERT INTO subemail SET ?';
-        db.query(insertSql, { email: subemail }, (err, result) => {
-          if (err) {
-            console.error('Error al registrar suscriptor:', err);
-            res.status(500).json({ error: 'Error al registrar suscriptor' });
-          } else {
-            res.status(200).json({ message: 'Suscriptor registrado con éxito' });
-          }
-        });
+  if (!subemail) {
+    const mensaje = 'Hola, este es un mensaje con estilos CSS';
+    res.render('index', { mensaje });
+  } else {
+    const sql = 'SELECT * FROM subemail WHERE email = ?'; // Consulta SQL para buscar registros en la tabla 'subemail' donde el campo 'email' sea igual al valor proporcionado
+    db.query(sql, [subemail], (err, result) => { // Ejecutar la consulta SQL con el valor 'subemail' como parámetro
+      if (err) { // Si ocurre un error durante la consulta
+        console.error('Error al verificar usuario:', err); // Mostrar un mensaje de error en la consola
+        res.status(500).json({ error: 'Error al verificar usuario' }); // Enviar una respuesta de error al cliente con código de estado 500 y un objeto JSON que indica el error
+      } else { // Si la consulta se ejecuta correctamente
+        if (result.length > 0) { // Si se encuentra al menos un registro en el resultado de la consulta
+          res.status(400).json({ error: 'El correo electrónico ya existe' }); // Enviar una respuesta al cliente con código de estado 400 y un objeto JSON indicando que el 'subemail' no es válido (ya existe en la tabla)
+        } else { // Si no se encuentra ningún registro en el resultado de la consulta
+          const insertSql = 'INSERT INTO subemail SET ?';
+          db.query(insertSql, { email: subemail }, (err, result) => {
+            if (err) {
+              console.error('Error al registrar suscriptor:', err);
+              res.status(500).json({ error: 'Error al registrar suscriptor' });
+            } else {
+              res.status(200).json({ message: 'Suscriptor registrado con éxito' });
+            }
+          });
+        }
       }
-    }
-  });
+    });
+  }
 });
-
 app.post('/valid-email', (req, res) => {
   const { email } = req.body;
   const sql = 'SELECT * FROM accounts WHERE email = ?';
