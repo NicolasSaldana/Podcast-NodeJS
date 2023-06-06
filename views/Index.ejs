@@ -6,7 +6,7 @@
   <title>Laburar. Podcast</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900">
   <link rel="stylesheet" href="/assets/fonts/icomoon/style.css">
 
@@ -345,7 +345,6 @@
               <a href=""><span class="icon-youtube"></span></a>
               <a href=""><span class="icon-spotify"></span></a>
             </div>
-
           </div>
           <div class="col-lg-3 mx-auto">
             <h3>Navega.</h3>
@@ -357,21 +356,19 @@
           <div class="col-lg-4" name="carti">
             <h3>Subscribete.</h3>
             <p>Suscribite para recibir antes que nadie, las noticias acerca de nuestro podcast.</p>
-            <!-- <form action="#" method="POST" class="form-subscribe" name="suscripcion">
-              <input type="email" class="form-control mb-3" placeholder="Ingresa tu Email"  >
-              <input type="submit" class="btn btn-primary" value="Subscribete" >
-            </form> -->
             <form action="http://localhost:3000/sub-email" method="POST" class="form-subscribe" name="subemail">
               <input type="email" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
-              <input type="submit" class="btn btn-primary"  value="Subscríbete">
+              <div class="alert alert-danger" role="alert"></div>
+              <input type="submit" class="btn btn-primary" value="Subscríbete">
             </form>
           </div>
-  
         </div>
       </div>
     </footer>
   </div>
-
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script src="/assets/js/jquery-3.3.1.min.js"></script>
   <script src="/assets/js/jquery-migrate-3.0.1.min.js"></script>
   <script src="/assets/js/jquery-ui.js"></script>
