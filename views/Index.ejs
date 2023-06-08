@@ -353,13 +353,14 @@
               <li><a href="login-register.html">Ingresa/Registrate</a></li>
             </ul>
           </div>
-          <div class="col-lg-4" name="carti">
+          <div class="col-lg-4" name="subemail">
             <h3>Subscribete.</h3>
             <p>Suscribite para recibir antes que nadie, las noticias acerca de nuestro podcast.</p>
-            <form action="http://localhost:3000/sub-email" method="POST" class="form-subscribe" name="subemail">
+            <form action="http://localhost:3000/subemail" method="POST" class="form-subscribe" name="subemail">
               <input type="email" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
-              <div class="alert alert-danger" role="alert"></div>
               <input type="submit" class="btn btn-primary" value="Subscríbete">
+              <div id="errorAlert"></div>
+
             </form>
           </div>
         </div>
@@ -381,7 +382,38 @@
   <script src="/assets/js/aos.js"></script>
 
   <script src="/assets/js/mediaelement-and-player.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  var subemailButton = document.getElementById('subemailButton');
+  subemailButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Evitar que se realice el submit del formulario
 
+    var subemailInput = document.getElementById('subemailInput');
+    var subemail = subemailInput.value.trim();
+
+    fetch('/subemail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ subemail: subemail })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.valid) {
+        document.getElementById('subemailForm').submit();
+      } else {
+        var errorMessageDiv = document.getElementById('errorMessageDiv');
+        errorMessageDiv.innerText = data.message;
+      }
+    })
+    .catch(error => {
+      console.error('Error al llamar a la API:', error);
+    });
+  });
+});
+
+</script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var mediaElements = document.querySelectorAll('video, audio'), total = mediaElements.length;

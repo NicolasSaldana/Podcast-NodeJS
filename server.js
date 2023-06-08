@@ -122,42 +122,63 @@ app.post('/valid-user', (req, res) => {
   });
 });
 
-//valid-email
-// res.status(200).json({ message: 'Suscriptor registrado con éxito' });
-// res.status(500).json({ error: 'Error al registrar suscriptor' });
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
-app.post('/sub-email', (req, res) => {
-  const { subemail } = req.body; // Obtener el valor del campo 'subemail' del cuerpo de la solicitud
+app.post('/subemail', (req, res) => {
+  const { subemail } = req.body;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   if (!subemail) {
-    const mensaje1 = 'Flaco mete un mail por favor';
-    res.render('index', { mensaje1 });
-  } else {
-    const sql = 'SELECT * FROM subemail WHERE email = ?';
-    db.query(sql, [subemail], (err, result) => {
-      if (err) {
-        console.error('Error al verificar usuario:', err);
-        res.status(500).json({ error: 'Error al verificar usuario' });
-      } else {
-        if (result.length > 0) {
-          const mensaje2 = 'Flaco, el correo electrónico ya está registrado';
-          res.render('index', { mensaje2 });
-        } else {
-          const mensaje3 = 'exitoflaco';
-          const insertSql = 'INSERT INTO subemail SET ?';
-          db.query(insertSql, { email: subemail }, (err, result) => {
-            if (err) {
-              console.error('Error al registrar suscriptor:', err);
-              res.status(500).json({ error: 'Error al registrar suscriptor' });
-            } else {
-              res.status(200).json({ message: 'Suscriptor registrado con éxito' });
-            }
-          });
-        }
-      }
-    });
+    return res.status(400).json({ error: 'El campo de correo electrónico está vacío' });
   }
+
+  function isValidEmail(subemail) {
+    if (!emailRegex.test(subemail)) {
+      return false;
+    } else {
+      // Verificar que el correo sea de Gmail o Outlook
+      if (subemail.endsWith('@gmail.com') || subemail.endsWith('@outlook.com')) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  if (!isValidEmail(subemail)) {
+    return res.status(400).json({ valid: false, message: 'Correo electrónico inválido' });
+  }
+
+  // Verificar si el correo ya existe en la base de datos
+  const sql = 'SELECT * FROM subemail WHERE email = ?';
+  db.query(sql, [subemail], (err, result) => {
+    if (err) {
+      console.error('Error al verificar correo electrónico:', err);
+      return res.status(500).json({ error: 'Error al verificar correo electrónico' });
+    }
+
+    if (result.length > 0) {
+      return res.status(400).json({ valid: false, message: 'El correo electrónico ya está tomado' });
+    }
+
+    // El correo electrónico es válido y no existe en la base de datos, realizar la inserción aquí
+    const insertSql = 'INSERT INTO subemail (email) VALUES (?)';
+    db.query(insertSql, [subemail], (err, result) => {
+      if (err) {
+        console.error('Error al insertar correo electrónico:', err);
+        return res.status(500).json({ error: 'Error al insertar correo electrónico' });
+      }
+      return res.json({ valid: true, message: 'Correo electrónico válido y registrado con éxito' });
+    });
+  });
 });
+
+
+
+
+
 
 app.post('/valid-email', (req, res) => {
   const { email } = req.body;
