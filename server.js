@@ -125,7 +125,6 @@ app.post('/valid-user', (req, res) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
 app.post('/subemail', (req, res) => {
   const { subemail } = req.body;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -134,51 +133,77 @@ app.post('/subemail', (req, res) => {
     return res.status(400).json({ error: 'El campo de correo electrónico está vacío' });
   }
 
-  function isValidEmail(subemail) {
-    if (!emailRegex.test(subemail)) {
+  function isValidEmail(email) {
+    if (!emailRegex.test(email)) {
       return false;
-    } else {
-      // Verificar que el correo sea de Gmail o Outlook
-      if (subemail.endsWith('@gmail.com') || subemail.endsWith('@outlook.com')) {
-        return true;
-      } else {
-        return false;
-      }
     }
+
+    // Verificar que el correo sea de Gmail o Outlook
+    if (email.endsWith('@gmail.com') || email.endsWith('@outlook.com')) {
+      return true;
+    }
+
+    return false;
   }
 
   if (!isValidEmail(subemail)) {
-    return res.status(400).json({ valid: false, message: 'Correo electrónico inválido' });
+    return res.status(400).render('index.ejs', {
+      error: {
+        valid: false,
+        message: 'El correo electrónico es inválido',
+        style: 'error-message'
+      }
+    });
   }
 
   // Verificar si el correo ya existe en la base de datos
-  const sql = 'SELECT * FROM subemail WHERE email = ?';
-  db.query(sql, [subemail], (err, result) => {
+  const selectSql = 'SELECT * FROM subemail WHERE email = ?';
+  db.query(selectSql, [subemail], (err, result) => {
     if (err) {
       console.error('Error al verificar correo electrónico:', err);
-      return res.status(500).json({ error: 'Error al verificar correo electrónico' });
+      return res.status(400).render('index.ejs', {
+        error: {
+          valid: false,
+          message: 'error al verificar el correo electronico',
+          style: 'error-message'
+        }
+      });
     }
 
     if (result.length > 0) {
-      return res.status(400).json({ valid: false, message: 'El correo electrónico ya está tomado' });
-    }
+      return res.status(400).render('index.ejs', {
+        error: {
+          valid: false,
+          message: 'el correo electronico ya esta tomado',
+          style: 'error-message'
+        }
+      });
+    };
 
     // El correo electrónico es válido y no existe en la base de datos, realizar la inserción aquí
     const insertSql = 'INSERT INTO subemail (email) VALUES (?)';
     db.query(insertSql, [subemail], (err, result) => {
       if (err) {
         console.error('Error al insertar correo electrónico:', err);
-        return res.status(500).json({ error: 'Error al insertar correo electrónico' });
+        return res.status(400).render('index.ejs', {
+          error: {
+            valid: false,
+            message: 'error al insertar el correo electronico',
+            style: 'error-message'
+          }
+        });
       }
-      return res.json({ valid: true, message: 'Correo electrónico válido y registrado con éxito' });
+      return res.status(400).render('index.ejs', {
+        error: {
+          valid: false,
+          message: 'Correo electrónico válido y registrado con éxito',
+          style: 'error-message'
+        }
+      });
+    
     });
   });
 });
-
-
-
-
-
 
 app.post('/valid-email', (req, res) => {
   const { email } = req.body;
