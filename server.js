@@ -42,6 +42,10 @@ app.use(session({
   }
 }));
 
+app.get('/', (req, res) => {
+  return res.status(400).render('index');
+});
+
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -122,85 +126,58 @@ app.post('/valid-user', (req, res) => {
   });
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
 app.post('/subemail', (req, res) => {
   const { subemail } = req.body;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!subemail) {
-    return res.status(400).json({ error: 'El campo de correo electrónico está vacío' });
-  }
+  // function isValidEmail(email) {
 
-  function isValidEmail(email) {
-    if (!emailRegex.test(email)) {
-      return false;
-    }
+  //   if (!emailRegex.test(email)) {
+  //     return false;
+  //   }
 
-    // Verificar que el correo sea de Gmail o Outlook
-    if (email.endsWith('@gmail.com') || email.endsWith('@outlook.com')) {
-      return true;
-    }
+  //   // Verificar que el correo sea de Gmail o Outlook
+  //   if (email.endsWith('@gmail.com') || email.endsWith('@outlook.com')) {
+  //     return true;
+  //   }
 
-    return false;
-  }
-
-  if (!isValidEmail(subemail)) {
-    return res.status(400).render('index.ejs', {
-      error: {
-        valid: false,
-        message: 'El correo electrónico es inválido',
-        style: 'error-message'
-      }
-    });
-  }
+  //   return false;
+  // }
 
   // Verificar si el correo ya existe en la base de datos
   const selectSql = 'SELECT * FROM subemail WHERE email = ?';
   db.query(selectSql, [subemail], (err, result) => {
     if (err) {
-      console.error('Error al verificar correo electrónico:', err);
-      return res.status(400).render('index.ejs', {
-        error: {
-          valid: false,
-          message: 'error al verificar el correo electronico',
-          style: 'error-message'
-        }
+      return res.status(500).json({
+        valid: false,
+        message: 'El correo electrónico ya está tomado',
+        style: 'error-message'
       });
     }
 
     if (result.length > 0) {
-      return res.status(400).render('index.ejs', {
-        error: {
+      return res.status(500).json({
           valid: false,
-          message: 'el correo electronico ya esta tomado',
+          message: 'El correo electrónico ya está tomado',
           style: 'error-message'
-        }
-      });
-    };
+        });
+    }
 
     // El correo electrónico es válido y no existe en la base de datos, realizar la inserción aquí
     const insertSql = 'INSERT INTO subemail (email) VALUES (?)';
     db.query(insertSql, [subemail], (err, result) => {
       if (err) {
-        console.error('Error al insertar correo electrónico:', err);
-        return res.status(400).render('index.ejs', {
-          error: {
-            valid: false,
-            message: 'error al insertar el correo electronico',
-            style: 'error-message'
-          }
+        return res.status(500).json({
+          valid: false,
+          message: 'El correo electrónico ya está tomado',
+          style: 'error-message'
         });
       }
-      return res.status(400).render('index.ejs', {
-        error: {
-          valid: false,
+      return res.status(200).json({
+          valid: true,
           message: 'Correo electrónico válido y registrado con éxito',
-          style: 'error-message'
-        }
-      });
-    
+          style: 'success-message'
+        });
     });
   });
 });

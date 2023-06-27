@@ -362,21 +362,21 @@
         <div class="col-lg-4" name="subemail">
           <h3>Subscribete.</h3>
           <p>Suscribite para recibir antes que nadie, las noticias acerca de nuestro podcast.</p>
-          <form action="http://localhost:3000/subemail" method="POST" class="form-subscribe" name="subemail">
-            <input type="email" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
-            <div id="errorMessageDiv" class="<%= error.style %>">
-              <%= error.message %>
-            </div>
-            
-            <input type="submit" class="btn btn-primary" value="Subscríbete" id="subemailButton">
+          <!-- <form action="http://localhost:3000/subemail" method="POST" class="form-subscribe" name="subemail"> -->
+  
+            <input type="email" id="miInput" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
 
-                <style>
-                  .error-message {
-                    color: red;
-                    font-weight: bold;
-                  }
-                </style>
-          </form>
+            <div id="resultMessage"></div>
+
+            <input type="submit"  class="btn btn-primary" onclick="vaciarInput" value="Subscríbete" id="subemailButton">
+
+            <style>
+              .error-message {
+                color: red;
+                font-weight: bold;
+              }
+            </style>
+          <!-- </form> -->
         </div>
       </div>
     </div>
@@ -397,40 +397,41 @@
   <script src="/assets/js/aos.js"></script>
 
   <script src="/assets/js/mediaelement-and-player.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var subemailButton = document.getElementById('subemailButton');
-      var errorMessageDiv = document.getElementById('errorMessageDiv');
   
-      subemailButton.addEventListener('click', function (event) {
-        event.preventDefault();
+ <script>
+  // Obtener referencia al elemento del mensaje de resultado
+var resultMessage = document.getElementById('resultMessage');
+
+subemailButton.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  // Resto del código...
   
-        var subemailInput = document.getElementById('subemailInput');
-        var subemail = subemailInput.value.trim();
-  
-        fetch('/subemail', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ subemail: subemail })
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.valid) {
-              document.getElementById('subemailForm').submit();
-            } else {
-              errorMessageDiv.textContent = data.message;
-              errorMessageDiv.classList.add(data.style);
-            }
-          })
-          .catch(error => {
-            console.error('Error al llamar a la API:', error);
-          });
-      });
+  fetch('http://localhost:3000/subemail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ subemail: document.getElementById("miInput").value })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.valid) {
+        resultMessage.textContent = data.message;
+        resultMessage.classList.add(data.style);
+        // Aquí puedes hacer otras acciones necesarias, como limpiar el campo de correo electrónico
+      } else {
+        resultMessage.textContent = data.message;
+        resultMessage.classList.add(data.style);
+      }
+    })
+    .catch(error => {
+      console.error('Error al llamar a la API:', error);
     });
-  </script>
-  
+});
+
+ </script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var mediaElements = document.querySelectorAll('video, audio'), total = mediaElements.length;
