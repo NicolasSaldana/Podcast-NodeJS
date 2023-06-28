@@ -126,58 +126,44 @@ app.post('/valid-user', (req, res) => {
   });
 });
 
-app.post('/subemail', (req, res) => {
+app.post("/subemail", (req, res) => {
   const { subemail } = req.body;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // function isValidEmail(email) {
-
-  //   if (!emailRegex.test(email)) {
-  //     return false;
-  //   }
-
-  //   // Verificar que el correo sea de Gmail o Outlook
-  //   if (email.endsWith('@gmail.com') || email.endsWith('@outlook.com')) {
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
-
-  // Verificar si el correo ya existe en la base de datos
-  const selectSql = 'SELECT * FROM subemail WHERE email = ?';
+  const selectSql = "SELECT * FROM subemail WHERE email = ?";
   db.query(selectSql, [subemail], (err, result) => {
     if (err) {
+      console.error("Error al verificar correo electrónico:", err);
       return res.status(500).json({
         valid: false,
-        message: 'El correo electrónico ya está tomado',
-        style: 'error-message'
+        message: "Error al verificar el correo electrónico",
+        style: "error-message",
       });
     }
 
     if (result.length > 0) {
-      return res.status(500).json({
-          valid: false,
-          message: 'El correo electrónico ya está tomado',
-          style: 'error-message'
-        });
+      return res.status(400).json({
+        valid: false,
+        message: "El correo electrónico ya está tomado",
+        style: "error-message",
+      });
     }
 
-    // El correo electrónico es válido y no existe en la base de datos, realizar la inserción aquí
-    const insertSql = 'INSERT INTO subemail (email) VALUES (?)';
+    const insertSql = "INSERT INTO subemail (email) VALUES (?)";
     db.query(insertSql, [subemail], (err, result) => {
       if (err) {
+        console.error("Error al insertar correo electrónico:", err);
         return res.status(500).json({
           valid: false,
-          message: 'El correo electrónico ya está tomado',
-          style: 'error-message'
+          message: "Error al insertar el correo electrónico",
+          style: "error-message",
         });
       }
       return res.status(200).json({
-          valid: true,
-          message: 'Correo electrónico válido y registrado con éxito',
-          style: 'success-message'
-        });
+        valid: true,
+        message: "Correo electrónico válido y registrado con éxito",
+        style: "success-message",
+      });
     });
   });
 });

@@ -1,11 +1,4 @@
-/* Base */
-.ok{
-  color: rgb(88, 27, 128);
-  
-}
-.bad{
-  color: rgb(21, 212, 78);
-}
+
 body {
   line-height: 1.7;
   color: #4d4d4d;
