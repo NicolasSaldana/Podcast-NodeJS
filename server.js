@@ -43,7 +43,7 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-  return res.status(400).render('index');
+  return res.render('index');
 });
 
 app.post('/register', async (req, res) => {
