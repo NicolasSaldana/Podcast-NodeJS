@@ -45,6 +45,7 @@ app.get('/', (req, res) => {
 });
 
 
+
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -124,6 +125,7 @@ app.post('/valid-user', (req, res) => {
   });
 });
 
+
 app.post("/subemail", (req, res) => {
   const { subemail } = req.body;
 
@@ -137,6 +139,11 @@ app.post("/subemail", (req, res) => {
     return res.status(400).json({ error: "El primer carácter no puede ser '@'" });
   }
 
+  if (subemail.charAt(subemail.length - 1) === ".") {
+    console.log('El último carácter no puede ser "."');
+    return res.status(400).json({ error: "El último carácter no puede ser '.'" });
+  }
+  
   const selectSql = 'SELECT COUNT(*) AS count FROM subemail WHERE subemail = ?';
   const selectValues = [subemail];
 

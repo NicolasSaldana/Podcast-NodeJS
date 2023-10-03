@@ -4,9 +4,10 @@ hacer el .env  ✔️
 hacer el input del footer ✔️
 guardar los correos del input en la DB ✔️
 verificar los correos, si ya existen no se guardan. De lo contrario se guardan.✔️
-hacer alertas sobre el punto anterior.
+hacer alertas sobre el punto anterior.✔️
 que no pueda ingresar como primer caracter un @. ✔️
 debe tener un @ (obligatorio).
+que el correo no termine con un punto.✔️
 que no acepte yopmail. Solo gmail, yahoo y outlook.
 no enviar el input vacio. ✔️
 

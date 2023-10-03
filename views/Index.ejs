@@ -367,7 +367,9 @@
           <input type="email" id="miInput" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
 
           <div id="mensaje" class="alert alert-primary" style="display: none;" role="alert">
-          </div> 
+            <!-- text -->
+
+          </div>
 
           <input type="submit" class="btn btn-primary" onclick="subscribe()" id="subemailButton">
 
@@ -380,14 +382,29 @@
 
             var inputValue = miInput.value.trim();
             var firstChar = inputValue.charAt(0);
+            var lastChar = inputValue.charAt(inputValue.length - 1);
 
-            if (firstChar === "@") {
-              alert("Ingresa un email válido");
+            var mensajeElement = document.getElementById("mensaje");
+            mensajeElement.style.display = "none";
+
+            if (firstChar === "@" || inputValue === "") {
+              mensajeElement.style.display = "block";
+              mensajeElement.textContent = "Ingresa un email válido";
+              mensajeElement.classList.remove("alert-success");
+              mensajeElement.classList.add("alert-danger");
+              miInput.value = "";
+              return; 
             }
 
-            if (inputValue === "") {
-              alert("Ingresa un email válido");
+            if (lastChar === ".") {
+              mensajeElement.style.display = "block";
+              mensajeElement.textContent = "El correo electrónico no puede terminar con un punto";
+              mensajeElement.classList.remove("alert-success");
+              mensajeElement.classList.add("alert-danger");
+              miInput.value = "";
+              return; 
             }
+
 
             event.preventDefault();
             fetch('http://localhost:3000/subemail', {
@@ -402,9 +419,17 @@
                 miInput.value = "";
                 console.log(data.message); // Mostrar el mensaje en la consola
 
-                var mensajeElement = document.getElementById("mensaje");
                 mensajeElement.style.display = "block";
                 mensajeElement.textContent = data.message;
+
+                if (data.message === "Correo electrónico guardado en la base de datos") {
+                  mensajeElement.classList.remove("alert-danger");
+                  mensajeElement.classList.remove("alert-primary");
+                  mensajeElement.classList.add("alert-success");
+                } else if (data.message === "El correo electrónico ya existe en la base de datos") {
+                  mensajeElement.classList.remove("alert-primary");
+                  mensajeElement.classList.add("alert-danger");
+                }
               })
               .catch(error => {
                 console.error(error);
