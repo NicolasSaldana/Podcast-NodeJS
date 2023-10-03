@@ -7,7 +7,6 @@ const cors = require('cors')
 const path = require('path')
 require('dotenv').config();
 
-// Resto de tu configuración y rutas...
 
 const app = express();
 const port = 3000
@@ -16,9 +15,8 @@ app.use("/assets", express.static(path.join(__dirname, "/assets")))
 app.set('views', path.join(__dirname, "/views"))
 app.set('view engine', 'ejs');
 app.use(cors());
-
 app.use(express.static(__dirname + 'href="/css/style.css">'));
-//Config de la BD
+
 // Configurar la conexión a la base de datos
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -43,8 +41,9 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-  return res.render('index');
+  return res.render('index.ejs');
 });
+
 
 app.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
@@ -67,7 +66,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-//Ruta para el inicio de sesión de usuario
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   console.log(req.body)
@@ -128,61 +126,62 @@ app.post('/valid-user', (req, res) => {
 
 app.post("/subemail", (req, res) => {
   const { subemail } = req.body;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const selectSql = "SELECT * FROM subemail WHERE email = ?";
-  db.query(selectSql, [subemail], (err, result) => {
+  if (!subemail) {
+    console.log('El correo electrónico no puede estar vacío');
+    return res.status(400).json({ error: "El correo electrónico no puede estar vacío" });
+  }
+
+  if (subemail.charAt(0) === "@") {
+    console.log('El primer carácter no puede ser "@"');
+    return res.status(400).json({ error: "El primer carácter no puede ser '@'" });
+  }
+
+  const selectSql = 'SELECT COUNT(*) AS count FROM subemail WHERE subemail = ?';
+  const selectValues = [subemail];
+
+  // const sql = 'INSERT INTO subemail (subemail) VALUES (?)';
+  // const values = [subemail];
+
+  // db.query(sql, values, (err, result) => {
+  //   if (err) {
+  //     console.error('Error al guardar el correo electrónico en la base de datos:', err);
+  //     return res.status(500).json({ error: 'Error al guardar el correo electrónico en la base de datos' });
+  //   }
+  //   console.log('Correo electrónico guardado en la base de datos:', subemail);
+  //   return res.status(200).json({ message: 'Correo electrónico guardado correctamente' });
+  // });
+  
+  db.query(selectSql, selectValues, (err, result) => {
+
     if (err) {
-      console.error("Error al verificar correo electrónico:", err);
-      return res.status(500).json({
-        valid: false,
-        message: "Error al verificar el correo electrónico",
-        style: "error-message",
-      });
+      console.error('Error al verificar el correo electrónico:', err);
+      return res.status(500).json({ error: 'Error al verificar el correo electrónico' });
     }
 
-    if (result.length > 0) {
-      return res.status(400).json({
-        valid: false,
-        message: "El correo electrónico ya está tomado",
-        style: "error-message",
-      });
-    }
+    const count = result[0].count;
 
-    const insertSql = "INSERT INTO subemail (email) VALUES (?)";
-    db.query(insertSql, [subemail], (err, result) => {
-      if (err) {
-        console.error("Error al insertar correo electrónico:", err);
-        return res.status(500).json({
-          valid: false,
-          message: "Error al insertar el correo electrónico",
-          style: "error-message",
-        });
-      }
-      return res.status(200).json({
-        valid: true,
-        message: "Correo electrónico válido y registrado con éxito",
-        style: "success-message",
-      });
-    });
-  });
-});
-
-app.post('/valid-email', (req, res) => {
-  const { email } = req.body;
-  const sql = 'SELECT * FROM accounts WHERE email = ?';
-  db.query(sql, [email], (err, result) => {
-    if (err) {
-      console.error('Error al verificar usuario:', err);
-      res.status(500).json({ error: 'Error al verificar usuario' });
+    if (count > 0) {
+      var error = 'El correo electrónico ya existe en la base de datos';
+      console.log('El correo electrónico ya existe en la base de datos:', subemail);
+      return res.status(200).json({ message: error });
     } else {
-      if (result.length > 0) {
-        res.status(200).json({ valid: false });
-      } else {
-        res.status(200).json({ valid: true });
-      }
+      const insertSql = 'INSERT INTO subemail (subemail) VALUES (?)';
+      const insertValues = [subemail];
+
+      db.query(insertSql, insertValues, (err, result) => {
+        if (err) {
+          var errorsaved = 'Error al guardar el correo electrónico en la base de datos';
+          return res.status(500).json({ message: errorsaved });
+        }
+        var saved = 'Correo electrónico guardado en la base de datos';
+        console.log('Correo electrónico guardado en la base de datos:', subemail);
+        return res.status(200).json({ message: saved });
+      });
     }
   });
+
+  console.log("working")
 });
 
 

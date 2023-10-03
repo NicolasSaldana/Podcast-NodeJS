@@ -186,11 +186,13 @@
                                 <h3 class="font-weight-light"><a href="single-post.html">Episodio 01: ...</a></h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>... <span
                                                 class="sep">/</span>
-                                            ... <span class="sep">/</span> ... </small></span></div>
+                                            ... <span class="sep">/</span> ... </small></span>
+                                </div>
 
 
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
+                                        <!-- Audio -->
                                         <source src="http://www.largesound.com/ashborytour/sound/AshboryBYU.mp3"
                                             type="audio/mp3">
                                     </audio>
@@ -429,6 +431,7 @@
     <script src="js/mediaelement-and-player.min.js"></script>
 
     <script>
+
         document.addEventListener('DOMContentLoaded', function () {
             var mediaElements = document.querySelectorAll('video, audio'),
                 total = mediaElements.length;

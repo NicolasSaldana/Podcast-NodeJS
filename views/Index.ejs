@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-  <title>Laburar. Podcast</title>
+  <title>Laburar. FREEDDAWG</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -366,50 +366,50 @@
 
           <input type="email" id="miInput" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
 
-          <div id="resultMessage"></div>
+          <div id="mensaje" class="alert alert-primary" style="display: none;" role="alert">
+          </div> 
 
-          <input type="submit" class="btn btn-primary" onclick="subscribe()" value="Subscríbete" id="subemailButton">
+          <input type="submit" class="btn btn-primary" onclick="subscribe()" id="subemailButton">
 
-          <style>
-            .error-message {
-              color: rgb(27, 218, 171);
-              font-weight: bold;
-            }
 
-            .success-message {
-              color: rgb(4, 96, 4);
-              font-weight: bold;
-            }
-          </style>
-
-          <script>
-            function subscribe() {
-              event.preventDefault();
-
-              var resultMessage = document.getElementById('resultMessage');
-
-              fetch('http://localhost:3000/subemail', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ subemail: document.getElementById("miInput").value })
-              })
-                .then(response => response.json())
-                .then(data => {
-                  resultMessage.textContent = data.message;
-                  resultMessage.className = ''; // Limpiar las clases de estilo existentes
-
-                  if (data.valid) {
-                    resultMessage.classList.add('success-message');
-                    // Aquí puedes hacer otras acciones necesarias, como limpiar el campo de correo electrónico
-                  } else {
-                    resultMessage.classList.add('error-message');
-                  }
-                })
-                .catch(error => {
-                  console.error('Error al llamar a la API:', error);
-                });
-            }
-          </script>
         </div>
+
+        <script>
+          function subscribe() {
+            var miInput = document.getElementById("miInput");
+
+            var inputValue = miInput.value.trim();
+            var firstChar = inputValue.charAt(0);
+
+            if (firstChar === "@") {
+              alert("Ingresa un email válido");
+            }
+
+            if (inputValue === "") {
+              alert("Ingresa un email válido");
+            }
+
+            event.preventDefault();
+            fetch('http://localhost:3000/subemail', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ subemail: miInput.value })
+            })
+              .then(response => response.json())
+              .then(data => {
+                miInput.value = "";
+                console.log(data.message); // Mostrar el mensaje en la consola
+
+                var mensajeElement = document.getElementById("mensaje");
+                mensajeElement.style.display = "block";
+                mensajeElement.textContent = data.message;
+              })
+              .catch(error => {
+                console.error(error);
+              });
+          }
+        </script>
+
+</body>

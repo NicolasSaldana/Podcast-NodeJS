@@ -1,0 +1,22 @@
+Descargar mysql  ✔️
+configurarlo como localhost (La BD) ✔️
+hacer el .env  ✔️
+hacer el input del footer ✔️
+guardar los correos del input en la DB ✔️
+verificar los correos, si ya existen no se guardan. De lo contrario se guardan.✔️
+hacer alertas sobre el punto anterior.
+que no pueda ingresar como primer caracter un @. ✔️
+debe tener un @ (obligatorio).
+que no acepte yopmail. Solo gmail, yahoo y outlook.
+no enviar el input vacio. ✔️
+
+
+Hacer la parte de "Contactanos" otra pestaña. Rompe el Responsive.
+Organizar los archivos, por carpetas.
+Hacer el sistema de favoritos.
+Poder cerrar sesión.
+Agregar una foto de perfil.
+Poder cambiar esa foto de perfil.
+Maybe, cambiar contraseña.
+
+
