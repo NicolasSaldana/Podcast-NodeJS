@@ -1,3 +1,4 @@
+
 const express = require('express');
 const session = require('express-session');
 const mysql = require('mysql');
@@ -44,86 +45,14 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
-
-
-app.post('/register', async (req, res) => {
-  const { username, email, password } = req.body;
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = { username, email, password: hashedPassword };
-    const sql = 'INSERT INTO accounts SET ?';
-    db.query(sql, user, (err, result) => {
-      if (err) {
-        console.error('Error al registrar usuario:', err);
-        res.status(500).send('Error al registrar usuario');
-        return;
-      }
-      console.log('Usuario registrado con éxito:', result);
-      res.send('Usuario registrado con éxito');
-    });
-  } catch (err) {
-    console.error('Error al hashear la contraseña:', err);
-    res.status(500).send('Error al hashear la contraseña');
-  }
+app.get('/prelogin', (req, res) => {
+  res.sendFile(path.join(__dirname, "templates/login.html"));
 });
 
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  console.log(req.body)
-  const sql = 'SELECT * FROM accounts WHERE username = ?';
-  db.query(sql,
-    username,
-    async (err, result, fields) => {
-      if (err) {
-        console.error('Error al iniciar sesión:', err);
-        res.status(500).send('Error al iniciar sesión');
-        return;
-      }
-      if (result.length == 0) {
-        console.log('Usuario no encontrado:', username);
-        res.redirect('http://localhost:5500/login-error.html')
-        return;
-      }
-      if (result.length > 0) {
-        const hashedPassword = result[0].password;
-        bcrypt.compare(password, hashedPassword, (err, result) => {
-          if (err) throw err;
-          if (result) {
-            req.session.loggedin = true;
-            req.session.username = username;
-            console.log('Inicio de sesión exitoso para el usuario:', username);
-            res.redirect('/home');
-          } else {
+app.get('/preregister', (req, res) => {
+  res.sendFile(path.join(__dirname, "templates/register.html"));
 
-            console.log('Contraseña incorrecta para el usuario:', username);
-            res.redirect('http://localhost:5500/login-error.html')
-            return
-          }
-        });
-      }
-    });
-});
-
-
-
-//Validacion de usuario y correo
-//checking user and email
-app.post('/valid-user', (req, res) => {
-  const { username } = req.body;
-  const sql = 'SELECT * FROM accounts WHERE username = ?';
-  db.query(sql, [username], (err, result) => {
-    if (err) {
-      console.error('Error al verificar usuario:', err);
-      res.status(500).json({ error: 'Error al verificar usuario' });
-    } else {
-      if (result.length > 0) {
-        res.status(200).json({ valid: false });
-      } else {
-        res.status(200).json({ valid: true });
-      }
-    }
-  });
-});
+})
 
 
 app.post("/subemail", (req, res) => {

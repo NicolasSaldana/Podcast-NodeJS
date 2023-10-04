@@ -11,6 +11,7 @@ que el correo no termine con un punto.✔️
 que no acepte yopmail. Solo gmail, yahoo y outlook.
 no enviar el input vacio. ✔️
 
+HACER UN ARCHIVO APARTE EL CODIGO DEL FOOTER. 
 
 Hacer la parte de "Contactanos" otra pestaña. Rompe el Responsive.
 Organizar los archivos, por carpetas.
