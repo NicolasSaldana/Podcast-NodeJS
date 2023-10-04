@@ -362,50 +362,46 @@
         <div class="col-lg-4" name="subemail">
           <h3>Subscribete.</h3>
           <p>Suscribite para recibir antes que nadie, las noticias acerca de nuestro podcast.</p>
-
           <input type="email" id="miInput" class="form-control mb-3" placeholder="Ingresa tu Email" name="subemail">
-
           <div id="mensaje" class="alert alert-primary" style="display: none;" role="alert">
             <!-- text -->
-
           </div>
-
           <input type="submit" class="btn btn-primary" onclick="subscribe()" id="subemailButton">
-
-
         </div>
 
         <script>
           function subscribe() {
             var miInput = document.getElementById("miInput");
-
             var inputValue = miInput.value.trim();
-            var firstChar = inputValue.charAt(0);
-            var lastChar = inputValue.charAt(inputValue.length - 1);
 
             var mensajeElement = document.getElementById("mensaje");
             mensajeElement.style.display = "none";
 
-            if (firstChar === "@" || inputValue === "") {
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!emailRegex.test(inputValue)) {
               mensajeElement.style.display = "block";
-              mensajeElement.textContent = "Ingresa un email válido";
+              mensajeElement.textContent = "Ingresa un correo electrónico válido";
               mensajeElement.classList.remove("alert-success");
               mensajeElement.classList.add("alert-danger");
               miInput.value = "";
-              return; 
+              return;
             }
 
-            if (lastChar === ".") {
+            var domain = inputValue.split("@")[1];
+
+            // Verificar si el dominio está permitido
+            if (domain !== "gmail.com" && domain !== "yahoo.com" && domain !== "outlook.com") {
               mensajeElement.style.display = "block";
-              mensajeElement.textContent = "El correo electrónico no puede terminar con un punto";
+              mensajeElement.textContent = "Solo se permiten correos electrónicos de Gmail, Yahoo y Outlook";
               mensajeElement.classList.remove("alert-success");
               mensajeElement.classList.add("alert-danger");
               miInput.value = "";
-              return; 
+              return;
             }
-
 
             event.preventDefault();
+
             fetch('http://localhost:3000/subemail', {
               method: 'POST',
               headers: {
@@ -416,7 +412,7 @@
               .then(response => response.json())
               .then(data => {
                 miInput.value = "";
-                console.log(data.message); // Mostrar el mensaje en la consola
+                console.log(data.message); 
 
                 mensajeElement.style.display = "block";
                 mensajeElement.textContent = data.message;

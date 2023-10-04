@@ -57,37 +57,27 @@ app.get('/preregister', (req, res) => {
 
 app.post("/subemail", (req, res) => {
   const { subemail } = req.body;
-
+  
   if (!subemail) {
     console.log('El correo electrónico no puede estar vacío');
     return res.status(400).json({ error: "El correo electrónico no puede estar vacío" });
   }
 
-  if (subemail.charAt(0) === "@") {
-    console.log('El primer carácter no puede ser "@"');
-    return res.status(400).json({ error: "El primer carácter no puede ser '@'" });
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(subemail)) {
+    console.log('El correo electrónico no es válido');
+    return res.status(400).json({ error: "El correo electrónico no es válido" });
   }
 
-  if (subemail.charAt(subemail.length - 1) === ".") {
-    console.log('El último carácter no puede ser "."');
-    return res.status(400).json({ error: "El último carácter no puede ser '.'" });
+  const domain = subemail.split("@")[1];
+  if (domain !== 'gmail.com' && domain !== 'yahoo.com' && domain !== 'outlook.com') {
+    console.log('El correo electrónico no es válido');
+    return res.status(400).json({ error: "El correo electrónico no es válido" });
   }
   
   const selectSql = 'SELECT COUNT(*) AS count FROM subemail WHERE subemail = ?';
   const selectValues = [subemail];
 
-  // const sql = 'INSERT INTO subemail (subemail) VALUES (?)';
-  // const values = [subemail];
-
-  // db.query(sql, values, (err, result) => {
-  //   if (err) {
-  //     console.error('Error al guardar el correo electrónico en la base de datos:', err);
-  //     return res.status(500).json({ error: 'Error al guardar el correo electrónico en la base de datos' });
-  //   }
-  //   console.log('Correo electrónico guardado en la base de datos:', subemail);
-  //   return res.status(200).json({ message: 'Correo electrónico guardado correctamente' });
-  // });
-  
   db.query(selectSql, selectValues, (err, result) => {
 
     if (err) {
