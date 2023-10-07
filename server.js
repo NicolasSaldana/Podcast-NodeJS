@@ -1,10 +1,10 @@
 
 const express = require('express');
 const session = require('express-session');
+const cors = require('cors')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const cors = require('cors')
+const bcrypt = require('bcrypt'); // para hashear una contraseña
 const path = require('path')
 require('dotenv').config();
 
@@ -17,6 +17,7 @@ app.set('views', path.join(__dirname, "/views"))
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.static(__dirname + 'href="/css/style.css">'));
+app.use("/templates", express.static(path.join(__dirname, "/templates")));
 
 // Configurar la conexión a la base de datos
 const db = mysql.createConnection({
@@ -37,13 +38,14 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     secure: false,
-    maxAge: 60 * 60 * 1000 // 1 hour
+    maxAge: 60 * 60 * 1000 
   }
 }));
 
 app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
+
 
 app.get('/prelogin', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/login.html"));
