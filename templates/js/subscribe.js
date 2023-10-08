@@ -18,7 +18,6 @@ function subscribe() {
 
     var domain = inputValue.split("@")[1];
 
-    // Verificar si el dominio está permitido
     if (domain !== "gmail.com" && domain !== "yahoo.com" && domain !== "outlook.com") {
       mensajeElement.style.display = "block";
       mensajeElement.textContent = "Solo se permiten correos electrónicos de Gmail, Yahoo y Outlook";
