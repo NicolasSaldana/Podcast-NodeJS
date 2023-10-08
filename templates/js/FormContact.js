@@ -44,13 +44,13 @@ function FormContact() {
         return;
     }
     
-    const nombreRegex = /^[^\d\s]{6,}$/;
+    const nombreRegex = /^[^\d\s]{3,}$/;
     if (!nombreRegex.test(nombre)) {
         event.preventDefault();
         console.log('El nombre no es válido');
         mensajeElement.classList.remove("alert-primary");
         mensajeElement.classList.add("alert-danger");
-        mensajeElement.textContent = "El nombre no es válido. Minimo 6 caracteres y sin números"; 
+        mensajeElement.textContent = "El nombre no es válido. Minimo 3 caracteres y sin números"; 
         return;
     }
 
@@ -63,10 +63,34 @@ function FormContact() {
         return;
     }
 
-    // if (email.split("@")[1] !== "gmail.com" && email.split("@")[1] !== "yahoo.com" && email.split("@")[1] !== "outlook.com") {
-    //     console.log('El correo electrónico no es válido');
-    //     return;
-    // }
+    if (email.split("@")[1] !== "gmail.com" && email.split("@")[1] !== "yahoo.com" && email.split("@")[1] !== "outlook.com") {
+        event.preventDefault();
+        console.log('El correo electrónico no es válido');
+        mensajeElement.classList.remove("alert-primary");
+        mensajeElement.classList.add("alert-danger");
+        mensajeElement.textContent = "Solo se permiten correos electrónicos de Gmail, Yahoo y Outlook.";
+        return;
+    }
+
+    const temaRegex = /^[A-Za-z\s]+$/;
+    if (!temaRegex.test(tema)) {
+        event.preventDefault();
+        console.log('El tema no es válido');
+        mensajeElement.classList.remove("alert-primary");
+        mensajeElement.classList.add("alert-danger");
+        mensajeElement.textContent = "El tema no es válido. Debe contener solo letras y espacios";
+        return;
+    }
+
+    const mensajeRegex = /^[A-Za-z0-9\s\.,?!'-]+$/;
+    if (!mensajeRegex.test(mensaje)) {
+        event.preventDefault();
+        console.log('El mensaje no es válido');
+        mensajeElement.classList.remove("alert-primary");
+        mensajeElement.classList.add("alert-danger");
+        mensajeElement.textContent = "El mensaje no es válido."
+        return;
+    }
 
     const data = {
         nombre: nombre,
@@ -76,7 +100,7 @@ function FormContact() {
         mensaje: mensaje
     };
 
-    event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
+    event.preventDefault(); 
     fetch('/contact', {
         method: 'POST',
         headers: {
@@ -91,6 +115,11 @@ function FormContact() {
             mensajeElement.classList.remove("alert-danger");
             mensajeElement.classList.add("alert-success");
             mensajeElement.textContent = data.message;
+            document.querySelector('#c_fname').value = "";
+            document.querySelector('#c_lname').value = "";
+            document.querySelector('#c_email').value = "";
+            document.querySelector('#c_subject').value = "";
+            document.querySelector('#c_message').value = "";
         })
         .catch(error => {
             console.error(error);

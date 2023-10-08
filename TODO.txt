@@ -15,8 +15,9 @@ HACER UN ARCHIVO APARTE EL CODIGO DEL FOOTER. ✔️
 La parte de "Contactanos" rompe el Responsive.✔️
 Usar REGEX en el correo. En el lado del usuario.✔️
 Hacer la verificacion con REGEX en el servidor.✔️
-Que el input de correo del contacto no acepte YOPMAIL.
-
+Que el input de correo del contacto no acepte YOPMAIL.✔️
+verificacion de inputs tema y mensaje. ✔️
+Limpiar el form. ✔️
 
 Hashear las contraeseñas de las cuentas.
 Organizar los archivos, por carpetas.

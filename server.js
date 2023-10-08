@@ -1,4 +1,3 @@
-
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors')
@@ -32,6 +31,7 @@ const db = mysql.createConnection({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 //Express session
 app.use(session({
   secret: process.env.SESSION_SCRT,
@@ -46,7 +46,6 @@ app.use(session({
 app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
-
 
 app.get('/prelogin', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/login.html"));
@@ -85,10 +84,10 @@ app.post('/contact', (req, res) => {
     return res.status(400).json({ error: "Complete los campos obligatorios" });
   }
 
-  const nombreRegex = /^[^\d\s]{6,}$/;
+  const nombreRegex = /^[^\d\s]{3,}$/;
   if (!nombreRegex.test(nombre)) {
     console.log('El nombre no es válido');
-    return res.status(400).json({ error: "El nombre no es válido. Mínimo 6 caracteres y sin números" });
+    return res.status(400).json({ error: "El nombre no es válido. Mínimo 3 caracteres y sin números" });
   }
 
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
