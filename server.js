@@ -28,7 +28,7 @@ const db = mysql.createConnection({
 });
 
 // Configurar el middleware de body-parser para manejar solicitudes POST
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
@@ -55,6 +55,23 @@ app.get('/preregister', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/register.html"));
 
 })
+
+app.post('/preregister', (req, res) => {
+  const { nombre, email, contraseña, rcontraseña } = req.body;
+
+  console.log('4KT');
+  return res.json({
+    message: 'Registro exitoso',
+    nombre: nombre,
+    email: email,
+    contraseña: contraseña,
+    rcontraseña: rcontraseña
+  });
+  // return res.status(200).json({ message: saved });
+
+})
+
+
 
 app.post('/contact', (req, res) => {
   const { nombre, apellido, email, tema, mensaje } = req.body;
@@ -110,7 +127,6 @@ app.post('/contact', (req, res) => {
     }
   });
 });
-
 
 app.post("/subemail", (req, res) => {
   const { subemail } = req.body;
