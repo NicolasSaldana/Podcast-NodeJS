@@ -47,13 +47,16 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, "templates/about.html"));
+});
+
 app.get('/prelogin', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/login.html"));
 });
 
 app.get('/preregister', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/register.html"));
-
 })
 
 app.post('/preregister', (req, res) => {
@@ -68,7 +71,7 @@ app.post('/preregister', (req, res) => {
     rcontraseña: rcontraseña
   });
   // return res.status(200).json({ message: saved });
-
+  
 })
 
 
