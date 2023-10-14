@@ -19,18 +19,20 @@ Que el input de correo del contacto no acepte YOPMAIL.✔️
 verificacion de inputs tema y mensaje. ✔️
 Limpiar el form. ✔️
 Modifica el archivo de About Us. ✔️
+
 Reducir el texxto que esta abajo del titulo "Contáctanos"
-
 Agregar los assets a la pagina de home.ejs.
-Hacer las vericaciones con REGEX en el servidor. Form del register.✔️
-Hacer la verificacion de si exsite el correo en la base de datos en la query.✔️
-
-
-Guardar los datos del register. ✔️
-Que las contraseñas sean iguales.✔️
+Hacer un archivo aparte el script del register.
 Hashear las contraeseñas de las cuentas.
 
+Hacer las vericaciones con REGEX en el servidor. Form del register.✔️
+Hacer la verificacion de si exsite el correo en la base de datos en la query.✔️
+Guardar los datos del register. ✔️
+Que las contraseñas sean iguales.✔️
+
+
 Organizar los archivos, por carpetas.
+
 Hacer el sistema de favoritos.
 Poder cerrar sesión.
 Agregar una foto de perfil.
