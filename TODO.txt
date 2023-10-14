@@ -19,6 +19,11 @@ Que el input de correo del contacto no acepte YOPMAIL.✔️
 verificacion de inputs tema y mensaje. ✔️
 Limpiar el form. ✔️
 Modifica el archivo de About Us. ✔️
+Reducir el texxto que esta abajo del titulo "Contáctanos"
+
+
+Hacer las vericaciones con REGEX en el servidor. Form del register.
+Hacer la verificacion de si exsite el correo en la base de datos en la query.
 
 Hashear las contraeseñas de las cuentas.
 Organizar los archivos, por carpetas.

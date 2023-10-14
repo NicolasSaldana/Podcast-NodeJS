@@ -62,16 +62,100 @@ app.get('/preregister', (req, res) => {
 app.post('/preregister', (req, res) => {
   const { nombre, email, contraseña, rcontraseña } = req.body;
 
+  if (nombre === "" && email === "" && contraseña === "" && rcontraseña === "") {
+    console.log('Complete los campos obligatorios');
+    return res.status(400).json({ message: "Complete los campos obligatorios" });
+  }
+
+  const camposIncompletos = [];
+
+  if (nombre === "") {
+    camposIncompletos.push("nombre");
+  }
+  if (email === "") {
+    camposIncompletos.push("email");
+  }
+  if (contraseña === "") {
+    camposIncompletos.push("contraseña");
+  }
+  if (rcontraseña === "") {
+    camposIncompletos.push("Repetir contraseña");
+  }
+
+  if (camposIncompletos.length > 0) {
+    const camposTexto = camposIncompletos.join(", ");
+    console.log('IF 1');
+    if (camposIncompletos.length === 1) {
+      return res.status(400).json({ message: "Complete el campo " + camposTexto + "" });
+    }
+    console.log('Complete los campos obligatorios');
+    return res.status(400).json({ message: `Complete los campos ${camposTexto}` });
+  }
+
+  const nombreRegex = /^\.{1}|^.{0,2}$|\.+$/;
+  if (nombreRegex.test(nombre)) {
+    console.log("'El nombre no es valido");
+    return res.status(400).json({ message: "El nombre no es válido. Debe contener al menos 3 caracteres y no puede contener caracteres '.'" });
+  }
+
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(email)) {
+    console.log('El correo no es válido');
+    return res.status(400).json({ message: "El correo no es válido" });
+  }
+
+  if (email.split("@")[1] !== "gmail.com" && email.split("@")[1] !== "yahoo.com" && email.split("@")[1] !== "outlook.com") {
+    console.log('El correo electrónico no es válido');
+    return res.status(400).json({ message: "Solo se permiten correos electrónicos de Gmail, Yahoo y Outlook." });
+  }
+
+  const contraseñatRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*\s).{5,}$/;
+  if (!contraseñatRegex.test(contraseña)) {
+    console.log('La contraseña no es valida');
+    return res.status(400).json({ message: "La contraseña no es valida. Debe contener al menos 5 caracteres, una letra mayúscula y un número." });
+  }
+
+  if (contraseña !== rcontraseña) {
+    console.log('Las contraseñas no coinciden');
+    // return res.status(400).json({ error: "Las contraseñas no coinciden" });
+    return res.status(400).json({ message: "Las contraseñas no coinciden" });
+
+  }
+
+  const sql = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
+  const values = [nombre, email, contraseña, rcontraseña];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error('Error al guardar los datos: ', err);
+      return res.status(500).send('Error al guardar los datos en la base de datos.');
+    } else {
+      var saved = 'Credenciales guardadas en la base de datos.';
+      console.log('Credenciales guardadas en la base de datos.');
+      return res.status(200).json({ message: saved });
+    }
+
+    // if (error) {
+    //   console.error('Error al guardar los datos: ', error);
+    //   return res.status(500).send('Error al guardar los datos en la base de datos.');
+    // } else {
+    //   var saved = 'Datos guardados correctamente en la base de datos.';
+    //   console.log('Datos guardados correctamente en la base de datos.');
+    //   return res.status(200).json({ message: saved });
+    // }
+  })
+
   console.log('4KT');
-  return res.json({
-    message: 'Registro exitoso',
-    nombre: nombre,
-    email: email,
-    contraseña: contraseña,
-    rcontraseña: rcontraseña
-  });
+  return res.redirect('/');
+  // return res.json({
+  //   message: 'Registro exitoso',
+  //   nombre: nombre,
+  //   email: email,
+  //   contraseña: contraseña,
+  //   rcontraseña: rcontraseña
+  // });
   // return res.status(200).json({ message: saved });
-  
+
 })
 
 
@@ -82,7 +166,6 @@ app.post('/contact', (req, res) => {
   if (!nombre || !email || !tema || !mensaje) {
     console.log('Complete los campos obligatorios');
     res.status(400).json({ error: "Complete los campos obligatorios" });
-    res.redirect('/');
   }
   const camposIncompletos = [];
 
