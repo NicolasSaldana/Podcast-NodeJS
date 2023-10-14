@@ -43,9 +43,21 @@ app.use(session({
   }
 }));
 
+// function isAuthenticated(req, res, next) {
+//   // Verificar si el usuario está autenticado
+//   if (req.session.isLoggedIn) {
+//     // Si el usuario está autenticado, continuar con la siguiente función en la cadena de middleware
+//     return next();
+//   } else {
+//     // Si el usuario no está autenticado, redirigir a una página de inicio de sesión o mostrar un mensaje de error
+//     return res.redirect('/prelogin');
+//   }
+// }
+
 app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
+
 
 app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/about.html"));
@@ -57,6 +69,16 @@ app.get('/prelogin', (req, res) => {
 
 app.get('/preregister', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/register.html"));
+})
+
+app.get('/loged', (req, res) => {
+  if (req.session.isLoggedIn) {
+    res.render('home.ejs', {
+      nombre: req.session.nombre
+    });
+  } else {
+    res.redirect('/prelogin');
+  }
 })
 
 app.post('/preregister', (req, res) => {
@@ -84,7 +106,6 @@ app.post('/preregister', (req, res) => {
 
   if (camposIncompletos.length > 0) {
     const camposTexto = camposIncompletos.join(", ");
-    console.log('IF 1');
     if (camposIncompletos.length === 1) {
       return res.status(400).json({ message: "Complete el campo " + camposTexto + "" });
     }
@@ -109,8 +130,8 @@ app.post('/preregister', (req, res) => {
     return res.status(400).json({ message: "Solo se permiten correos electrónicos de Gmail, Yahoo y Outlook." });
   }
 
-  const contraseñatRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*\s).{5,}$/;
-  if (!contraseñatRegex.test(contraseña)) {
+  const contraseñaRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?!.*\s).{5,}$/;
+  if (!contraseñaRegex.test(contraseña)) {
     console.log('La contraseña no es valida');
     return res.status(400).json({ message: "La contraseña no es valida. Debe contener al menos 5 caracteres, una letra mayúscula y un número." });
   }
@@ -122,42 +143,51 @@ app.post('/preregister', (req, res) => {
 
   }
 
-  const sql = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
-  const values = [nombre, email, contraseña, rcontraseña];
 
-  db.query(sql, values, (err, result) => {
+  const checkEmailQuery = `SELECT COUNT(*) AS count FROM cuentas WHERE email = ?`;
+  const checkEmailValues = [email];
+
+  db.query(checkEmailQuery, checkEmailValues, (err, result) => {
     if (err) {
-      console.error('Error al guardar los datos: ', err);
-      return res.status(500).send('Error al guardar los datos en la base de datos.');
-    } else {
-      var saved = 'Credenciales guardadas en la base de datos.';
-      console.log('Credenciales guardadas en la base de datos.');
-      return res.status(200).json({ message: saved });
+      console.error('Error al verificar el correo electrónico: ', err);
+      return res.status(500).json({ message: 'Error al verificar el correo electrónico en la base de datos.' });
     }
 
-    // if (error) {
-    //   console.error('Error al guardar los datos: ', error);
-    //   return res.status(500).send('Error al guardar los datos en la base de datos.');
-    // } else {
-    //   var saved = 'Datos guardados correctamente en la base de datos.';
-    //   console.log('Datos guardados correctamente en la base de datos.');
-    //   return res.status(200).json({ message: saved });
-    // }
-  })
+    const count = result[0].count;
 
-  console.log('4KT');
-  return res.redirect('/');
-  // return res.json({
-  //   message: 'Registro exitoso',
-  //   nombre: nombre,
-  //   email: email,
-  //   contraseña: contraseña,
-  //   rcontraseña: rcontraseña
+    if (count > 0) {
+      console.log('El correo electrónico ya existe en la base de datos:', email);
+      return res.status(200).json({ message: 'El correo electrónico ya existe en la base de datos' });
+    } else {
+
+      const insertQuery = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
+      const insertValues = [nombre, email, contraseña, rcontraseña];
+
+      db.query(insertQuery, insertValues, (err, result) => {
+        if (err) {
+          console.error('Error al guardar los datos: ', err);
+          return res.status(500).json({ message: 'Error al guardar los datos en la base de datos.' });
+        }
+        console.log('Datos guardados correctamente en la base de datos.');
+        req.session.isLoggedIn = true;
+        return res.redirect('/loged');
+      });
+    }
+  });
+  // const sql = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
+  // const values = [nombre, email, contraseña, rcontraseña];
+
+  // db.query(sql, values, (error, result) => {
+  //   if (error) {
+  //     console.error('Error al guardar los datos: ', error);
+  //     return res.status(500).json({ error: 'Error al guardar los datos en la base de datos.' });
+  //   } else {
+  //     console.log('Datos guardados correctamente en la base de datos.');
+  //     return res.json({ message: 'Datos guardados correctamente en la base de datos.' });
+  //   }
   // });
-  // return res.status(200).json({ message: saved });
 
 })
-
 
 
 app.post('/contact', (req, res) => {

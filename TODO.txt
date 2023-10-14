@@ -21,11 +21,15 @@ Limpiar el form. ✔️
 Modifica el archivo de About Us. ✔️
 Reducir el texxto que esta abajo del titulo "Contáctanos"
 
+Agregar los assets a la pagina de home.ejs.
+Hacer las vericaciones con REGEX en el servidor. Form del register.✔️
+Hacer la verificacion de si exsite el correo en la base de datos en la query.✔️
 
-Hacer las vericaciones con REGEX en el servidor. Form del register.
-Hacer la verificacion de si exsite el correo en la base de datos en la query.
 
+Guardar los datos del register. ✔️
+Que las contraseñas sean iguales.✔️
 Hashear las contraeseñas de las cuentas.
+
 Organizar los archivos, por carpetas.
 Hacer el sistema de favoritos.
 Poder cerrar sesión.
