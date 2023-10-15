@@ -3,7 +3,7 @@ const session = require('express-session');
 const cors = require('cors')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); // para hashear una contraseña
+const bcrypt = require('bcrypt'); 
 const path = require('path');
 const { error } = require('console');
 require('dotenv').config();
@@ -77,7 +77,9 @@ app.get('/prelogin', (req, res) => {
 
 app.post('/prelogin', (req, res) => {
   const { email, contraseña } = req.body;
-  
+
+  //Consulta SQL para verificar si existe el correo electrónico. Ademas obtengo el nombre del usuario y la contraseña en la consulta.
+  //La variable count, NO CONFUNDIR CON EL COUNT(*), es el conteo de filas en donde coincide con el email proporcionado.  
   const checkEmailQuery = `SELECT COUNT(*) AS count, nombre, contraseña FROM cuentas WHERE email = ?`;
   const checkEmailValues = [email];
 
@@ -91,11 +93,10 @@ app.post('/prelogin', (req, res) => {
     const storedPassword = result[0].contraseña;
     const nombre = result[0].nombre;
 
-    // Verificar si existe el correo en la BD
     if (count > 0) {
       //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
       bcrypt.compare(contraseña, storedPassword, (err, isMatch) => {
-        if(isMatch) {
+        if (isMatch) {
           console.log('WELCOME');
           console.log(nombre);
         } else {
