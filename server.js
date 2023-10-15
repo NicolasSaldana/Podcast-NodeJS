@@ -59,10 +59,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/loged', (req, res) => {
-  if (req.session.isLoggedIn) {
-    res.render('home.ejs', {
-      nombre: req.session.nombre
-    });
+  if (req.session.isLoggedIn === true) {
+    res.render('home.ejs');
+    console.log(req.session);
   } else {
     res.redirect('/prelogin');
   }
@@ -161,17 +160,29 @@ app.post('/preregister', (req, res) => {
     } else {
 
       const insertQuery = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
-      const insertValues = [nombre, email, contraseña, rcontraseña];
+      // const insertValues = [nombre, email, contraseña, rcontraseña];
 
-      db.query(insertQuery, insertValues, (err, result) => {
+      const saltRounds = 10;
+      bcrypt.hash(contraseña, saltRounds, (err, hashedPassword) => {
         if (err) {
-          console.error('Error al guardar los datos: ', err);
-          return res.status(500).json({ message: 'Error al guardar los datos en la base de datos.' });
+          console.error('Error al hashear la contraseña: ', err);
+          return res.status(500).json({ message: 'Error al hashear la contraseña en la base de datos.' });
         }
-        console.log('Datos guardados correctamente en la base de datos.');
-        req.session.isLoggedIn = true;
-        return res.redirect('/loged');
-      });
+
+        const hashedRepassword = hashedPassword; // No es necesario volver a encriptar la contraseña repetida
+
+        const insertValues = [nombre, email, hashedPassword, hashedRepassword];
+
+        db.query(insertQuery, insertValues, (err, result) => {
+          if (err) {
+            console.error('Error al guardar los datos: ', err);
+            return res.status(500).json({ message: 'Error al guardar los datos en la base de datos.' });
+          }
+          console.log('Datos guardados correctamente en la base de datos.');
+          req.session.isLoggedIn = true;
+          return res.redirect('/loged');
+        });
+      })
     }
   });
 })
