@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 
 app.get('/loged', (req, res) => {
   if (req.session.isLoggedIn === true) {
-    res.render('home.ejs');
+    res.render('home.ejs', { nombre: req.session.nombre });
     console.log(req.session);
   } else {
     res.redirect('/prelogin');
@@ -74,6 +74,13 @@ app.get('/about', (req, res) => {
 app.get('/prelogin', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/login.html"));
 });
+
+app.post('/prelogin', (req, res) => {
+  const { email, contraseña } = req.body;
+
+  console.log(email, contraseña);
+  // res.json({ nombre, contraseña });
+})
 
 app.get('/preregister', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/register.html"));
@@ -180,6 +187,7 @@ app.post('/preregister', (req, res) => {
           }
           console.log('Datos guardados correctamente en la base de datos.');
           req.session.isLoggedIn = true;
+          req.session.nombre = nombre;
           return res.redirect('/loged');
         });
       })

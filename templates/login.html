@@ -87,9 +87,9 @@
 
                 <div class="form-group row">
                   <div class="col-md-12">
-                    <label for="nombre" class="text-black" data-sb-validations="required">Nombre <span
+                    <label for="email" class="text-black" data-sb-validations="required">Email <span
                         class="text-primary">*</span></label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    <input type="email" class="form-control" id="email" name="email" required>
                   </div>
                 </div>
 
@@ -102,13 +102,15 @@
                 </div>
 
                 <p>¿No tienes una cuenta? <a href="/preregister" style="color: #2EBAF2;">Regístrate</a></p>
-
+                <div id="mensajelogin" class="alert alert-primary d-none" role="alert">
+                  <!-- text -->
+                </div>
                 <div class="form-group row">
                   <div class="col-lg-12">
-                    <input type="submit" class="btn btn-primary btn-lg">
+                    <input type="submit" class="btn btn-primary btn-lg" onclick="test()">
                   </div>
                 </div>
-                
+
               </div>
             </form>
           </div>
@@ -187,6 +189,45 @@
         });
       }
     });
+  </script>
+
+  <script>
+    function test() {
+      var mensajelogin = document.getElementById("mensajelogin");
+      mensajelogin.classList.remove("d-none");
+
+      var email = document.querySelector('#email').value;
+      var contraseña = document.querySelector('#contraseña').value;
+
+      if (email === "" && contraseña === "") {
+        mensajelogin.textContent = "Complete los campos obligatorios";
+        return;
+      }
+
+      const data = {
+        email : email,
+        contraseña : contraseña,
+      }
+
+      event.preventDefault();
+      fetch('/prelogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data.message);
+          // mensajeregister.classList.remove("alert-primary");
+          // mensajeregister.classList.add("alert-danger");
+          // mensajeregister.textContent = data.message;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   </script>
 
   <script src="/templates/js/subscribe.js"></script>
