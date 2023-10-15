@@ -23,14 +23,17 @@ Modifica el archivo de About Us. ✔️
 Reducir el texxto que esta abajo del titulo "Contáctanos"✔️
 Agregar los assets a la pagina de home.ejs.✔️
 Hacer un archivo aparte el script del register.✔️
-Hashear las contraeseñas de las cuentas.
-Hacer un about con ejs. El de ahora lleva a un about cuando no estas logueado.
+Hashear las contraeseñas de las cuentas.✔️
 
 Hacer las vericaciones con REGEX en el servidor. Form del register.✔️
 Hacer la verificacion de si exsite el correo en la base de datos en la query.✔️
 Guardar los datos del register. ✔️
 Que las contraseñas sean iguales.✔️
 
+
+Hacer un about con ejs. El de ahora lleva a un about cuando no estas logueado.
+Como devolver el nombre en el prelogin. Porque el usuario no lo esta mandando, solo manda email y contraeseña.
+Hacer alertas para login. 
 
 Organizar los archivos, por carpetas.
 Agregar las imagenes y audios en el home.ejs.

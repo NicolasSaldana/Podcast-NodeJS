@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 app.get('/loged', (req, res) => {
   if (req.session.isLoggedIn === true) {
     res.render('home.ejs', { nombre: req.session.nombre });
-    console.log(req.session);
+    // console.log(req.session);
   } else {
     res.redirect('/prelogin');
   }
@@ -77,9 +77,39 @@ app.get('/prelogin', (req, res) => {
 
 app.post('/prelogin', (req, res) => {
   const { email, contraseña } = req.body;
+  
+  const checkEmailQuery = `SELECT COUNT(*) AS count, nombre, contraseña FROM cuentas WHERE email = ?`;
+  const checkEmailValues = [email];
+
+  db.query(checkEmailQuery, checkEmailValues, (err, result) => {
+    if (err) {
+      console.error('Error al verificar el correo electrónico: ', err);
+      return res.status(500).json({ message: 'Error al verificar el correo electrónico en la base de datos.' });
+    }
+
+    const count = result[0].count;
+    const storedPassword = result[0].contraseña;
+    const nombre = result[0].nombre;
+
+    // Verificar si existe el correo en la BD
+    if (count > 0) {
+      //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
+      bcrypt.compare(contraseña, storedPassword, (err, isMatch) => {
+        if(isMatch) {
+          console.log('WELCOME');
+          console.log(nombre);
+        } else {
+          console.log('no coinciden');
+        }
+      })
+      // return res.status(200).json({ message: 'El correo electrónico ya existe en la base de datos' });
+    } else {
+      console.log('ERROR');
+
+    }
+  });
 
   console.log(email, contraseña);
-  // res.json({ nombre, contraseña });
 })
 
 app.get('/preregister', (req, res) => {
