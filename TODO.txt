@@ -20,10 +20,11 @@ verificacion de inputs tema y mensaje. ✔️
 Limpiar el form. ✔️
 Modifica el archivo de About Us. ✔️
 
-Reducir el texxto que esta abajo del titulo "Contáctanos"
-Agregar los assets a la pagina de home.ejs.
-Hacer un archivo aparte el script del register.
+Reducir el texxto que esta abajo del titulo "Contáctanos"✔️
+Agregar los assets a la pagina de home.ejs.✔️
+Hacer un archivo aparte el script del register.✔️
 Hashear las contraeseñas de las cuentas.
+Hacer un about con ejs. El de ahora lleva a un about cuando no estas logueado.
 
 Hacer las vericaciones con REGEX en el servidor. Form del register.✔️
 Hacer la verificacion de si exsite el correo en la base de datos en la query.✔️
@@ -32,6 +33,8 @@ Que las contraseñas sean iguales.✔️
 
 
 Organizar los archivos, por carpetas.
+Agregar las imagenes y audios en el home.ejs.
+Areglar los audios de los podcast.
 
 Hacer el sistema de favoritos.
 Poder cerrar sesión.

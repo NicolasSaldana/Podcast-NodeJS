@@ -58,6 +58,15 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
+app.get('/loged', (req, res) => {
+  if (req.session.isLoggedIn) {
+    res.render('home.ejs', {
+      nombre: req.session.nombre
+    });
+  } else {
+    res.redirect('/prelogin');
+  }
+})
 
 app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/about.html"));
@@ -71,15 +80,6 @@ app.get('/preregister', (req, res) => {
   res.sendFile(path.join(__dirname, "templates/register.html"));
 })
 
-app.get('/loged', (req, res) => {
-  if (req.session.isLoggedIn) {
-    res.render('home.ejs', {
-      nombre: req.session.nombre
-    });
-  } else {
-    res.redirect('/prelogin');
-  }
-})
 
 app.post('/preregister', (req, res) => {
   const { nombre, email, contraseña, rcontraseña } = req.body;
@@ -174,19 +174,6 @@ app.post('/preregister', (req, res) => {
       });
     }
   });
-  // const sql = `INSERT INTO cuentas (nombre, email, contraseña, recontraseña) VALUES (?, ?, ?, ?)`;
-  // const values = [nombre, email, contraseña, rcontraseña];
-
-  // db.query(sql, values, (error, result) => {
-  //   if (error) {
-  //     console.error('Error al guardar los datos: ', error);
-  //     return res.status(500).json({ error: 'Error al guardar los datos en la base de datos.' });
-  //   } else {
-  //     console.log('Datos guardados correctamente en la base de datos.');
-  //     return res.json({ message: 'Datos guardados correctamente en la base de datos.' });
-  //   }
-  // });
-
 })
 
 
