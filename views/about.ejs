@@ -66,7 +66,9 @@
                     </a>
 
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item text-center"><%= nombre %></a>
+                      <li><a class="dropdown-item text-center">
+                          <%= nombre %>
+                        </a>
                       </li>
                       <li>
                         <hr class="dropdown-divider">
@@ -79,9 +81,8 @@
                         <hr class="dropdown-divider">
                       </li>
                       <li>
-                        <a class="dropdown-item">
-                          <i class="bi bi-arrow-left-square mr-2" href="session_destroy()" name="cerrar_sesion"
-                            onclick="session_destroy()"></i>Cerrar
+                        <a class="dropdown-item" href="/logout">
+                          <i class="bi bi-arrow-left-square mr-2"></i>Cerrar
                           Sesión
                         </a>
                       </li>
@@ -201,7 +202,7 @@
             <h3>Navega.</h3>
             <ul class="list-unstyled">
               <li><a href="/loged">Inicio</a></li>
-              <li><a href="">Cerrar Sesión</a></li>
+              <li><a href="/logout">Cerrar Sesión</a></li>
             </ul>
           </div>
           <div class="col-lg-4" name="subemail">

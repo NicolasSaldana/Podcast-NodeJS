@@ -58,10 +58,12 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
-// app.get('/logout', (req, res) => {
-//   req.session.destroy();
-//   res.redirect('/');
-// })
+app.get('/logout', (req, res) => {
+  if (req.session.isLoggedIn === true) {
+    req.session.destroy();
+  } 
+  res.redirect('/');
+})
 
 app.get('/loged', (req, res) => {
   if (req.session.isLoggedIn === true) {
@@ -79,7 +81,6 @@ app.get('/about', (req, res) => {
   } else {
     res.sendFile(path.join(__dirname, "templates/about.html"));
   }
-  // res.redirect('/prelogin');
 });
 
 app.get('/prelogin', (req, res) => {

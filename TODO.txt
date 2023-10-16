@@ -37,7 +37,10 @@ Mostrar el usuario en el home.ejs correctamente.✔️
 Hacer verificaciones en el login.✔️
 Hacer alertas para login. ✔️
 Redireccionar despues de loguear.✔️
-Poder cerrar sesión.
+Poder cerrar sesión.✔️
+
+Boton para mostrar las contraseñas, en el register y login.
+Hacer un boton para subir arriba del todo de la pagina.
 Arreglar estilos de la barra de audio en el home.
 Hacer pagina para los episodios favoritos.
 
