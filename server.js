@@ -3,7 +3,7 @@ const session = require('express-session');
 const cors = require('cors')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
 const path = require('path');
 const { error } = require('console');
 require('dotenv').config();
@@ -58,6 +58,11 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
+// app.get('/logout', (req, res) => {
+//   req.session.destroy();
+//   res.redirect('/');
+// })
+
 app.get('/loged', (req, res) => {
   if (req.session.isLoggedIn === true) {
     res.render('home.ejs', { nombre: req.session.nombre });
@@ -68,7 +73,13 @@ app.get('/loged', (req, res) => {
 })
 
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname, "templates/about.html"));
+  if (req.session.isLoggedIn === true) {
+    res.render('about.ejs', { nombre: req.session.nombre });
+    // console.log(req.session);
+  } else {
+    res.sendFile(path.join(__dirname, "templates/about.html"));
+  }
+  // res.redirect('/prelogin');
 });
 
 app.get('/prelogin', (req, res) => {
@@ -77,6 +88,31 @@ app.get('/prelogin', (req, res) => {
 
 app.post('/prelogin', (req, res) => {
   const { email, contraseña } = req.body;
+
+  if (email === "" && contraseña === "") {
+    console.log('Complete los campos obligatorios');
+    return res.status(400).json({ message: "Complete los campos obligatorios" });
+  }
+
+  if (email === "" || contraseña === "") {
+    if (email === "") {
+      console.log('Complete el campo email');
+      return res.status(400).json({ message: "Complete el campo email" });
+    } else {
+      console.log('Complete el campo contraseña');
+      return res.status(400).json({ message: "Complete el campo contraseña" });
+    }
+  }
+
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Formato del correo electrónico invalido." });
+  }
+
+  if (email.split("@")[1] !== "gmail.com" && email.split("@")[1] !== "yahoo.com" && email.split("@")[1] !== "outlook.com") {
+    console.log('El correo electrónico no es válido');
+    return res.status(400).json({ message: "Recuerda solo se permiten correos electrónicos de Gmail, Yahoo y Outlook." });
+  }
 
   //Consulta SQL para verificar si existe el correo electrónico. Ademas obtengo el nombre del usuario y la contraseña en la consulta.
   //La variable count, NO CONFUNDIR CON EL COUNT(*), es el conteo de filas en donde coincide con el email proporcionado.  
@@ -96,21 +132,31 @@ app.post('/prelogin', (req, res) => {
     if (count > 0) {
       //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
       bcrypt.compare(contraseña, storedPassword, (err, isMatch) => {
+        // if (err) {
+        //   console.error('Error al verificar la contraseñas: ', err);
+        //   return res.status(500).json({ message: 'Error al verificar la contraseñas en la base de datos.' });
+        // }
+
         if (isMatch) {
-          console.log('WELCOME');
-          console.log(nombre);
+          console.log('La contraseña es correcta');
+          req.session.isLoggedIn = true;
+          req.session.nombre = nombre;
+          // console.log('WELCOME');
+          // console.log(nombre);
+          return res.redirect('/loged');
+
         } else {
-          console.log('no coinciden');
+          console.log('No es la contraseña correcta');
+          return res.status(200).json({ message: 'Contraseña incorrecta' });
         }
       })
-      // return res.status(200).json({ message: 'El correo electrónico ya existe en la base de datos' });
     } else {
-      console.log('ERROR');
-
+      console.log('El correo electrónico no existe en la base de datos');
+      return res.status(200).json({ message: 'Correo electrónico incorrecto' });
     }
   });
 
-  console.log(email, contraseña);
+  // console.log(email, contraseña);
 })
 
 app.get('/preregister', (req, res) => {

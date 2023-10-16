@@ -15,10 +15,7 @@
     <link rel="stylesheet" href="/assets/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
-
-
     <link rel="stylesheet" href="/assets/css/aos.css">
-
     <link rel="stylesheet" href="/assets/css/style.css">
 
 </head>
@@ -52,9 +49,6 @@
                                     <li class="active">
                                         <a href="/loged"><b>Inicio</b></a>
                                     </li>
-                                    <li>
-                                        <a href="">{<%= nombre %>}</a>
-                                      </li>
                                     <li><a href="/about">Acerca de nosotros</a></li>
                                     <li>
                                         <div class="dropdown">
@@ -66,6 +60,13 @@
                                             </a>
 
                                             <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item text-center">
+                                                        <%= nombre %>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
                                                 <li><a class="dropdown-item" href="#"><i
                                                             class="bi bi-star mr-2"></i>Favoritos</a>
                                                 </li>
@@ -176,13 +177,14 @@
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');"></div>
                             <div class="text">
-                                <h3 class="font-weight-light"><a href="#">Episodio 01: Nuestro primer podcast.</a></h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 01: Primer podcast.</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>...<span
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span></div>
 
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
-                                        <source src="http://www.largesound.com/ashborytour/sound/AshboryBYU.mp3"
+                                        <source
+                                            src="https://free-loops.com/data/mp3/92/07/6b0e8070833c3e2af7323a8b0cac.mp3"
                                             type="audio/mp3">
                                     </audio>
                                 </div>
@@ -193,13 +195,14 @@
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');"></div>
                             <div class="text">
-                                <h3 class="font-weight-light"><a href="#">Episodio 02: ...</a></h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 02: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>...<span
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span></div>
 
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
-                                        <source src="http://www.largesound.com/ashborytour/sound/AshboryBYU.mp3"
+                                        <source
+                                            src="https://free-loops.com/data/mp3/92/07/6b0e8070833c3e2af7323a8b0cac.mp3"
                                             type="audio/mp3">
                                     </audio>
                                 </div>
@@ -210,7 +213,7 @@
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');"></div>
                             <div class="text">
-                                <h3 class="font-weight-light"><a href="#">Episodio 03: ...</a></h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 03: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small> ... <span
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> ... </small></span>
@@ -229,7 +232,7 @@
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');"></div>
                             <div class="text">
-                                <h3 class="font-weight-light"><a href="#">Episodio 04: ...</a></h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 04: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>... <span
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> ... </small></span>
@@ -248,7 +251,7 @@
                             <div class="image" style="background-image: url('#');"></div>
                             <div class="text">
 
-                                <h3 class="font-weight-light"><a href="#">Episodio 05: ...</a></h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 05: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>... <span
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> . ..</small></span></div>
@@ -401,12 +404,15 @@
     <script src="assets/js/jquery-3.3.1.min.js"></script>
     <script src="assets/js/jquery-migrate-3.0.1.min.js"></script>
     <script src="assets/js/jquery-ui.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
         integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
         crossorigin="anonymous"></script>
+
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="assets/js/jquery.stellar.min.js"></script>
     <script src="assets/js/jquery.countdown.min.js"></script>

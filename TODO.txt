@@ -31,16 +31,21 @@ Guardar los datos del register. ✔️
 Que las contraseñas sean iguales.✔️
 
 
-Hacer un about con ejs. El de ahora lleva a un about cuando no estas logueado.
-Como devolver el nombre en el prelogin. Porque el usuario no lo esta mandando, solo manda email y contraeseña.
-Hacer alertas para login. 
+Hacer un about con ejs. El de ahora lleva a un about cuando no estas logueado.✔️
+Como devolver el nombre en el prelogin. Porque el usuario no lo esta mandando, solo manda email y contraeseña.✔️
+Mostrar el usuario en el home.ejs correctamente.✔️
+Hacer verificaciones en el login.✔️
+Hacer alertas para login. ✔️
+Redireccionar despues de loguear.✔️
+Poder cerrar sesión.
+Arreglar estilos de la barra de audio en el home.
+Hacer pagina para los episodios favoritos.
 
 Organizar los archivos, por carpetas.
 Agregar las imagenes y audios en el home.ejs.
 Areglar los audios de los podcast.
 
 Hacer el sistema de favoritos.
-Poder cerrar sesión.
 Agregar una foto de perfil.
 Poder cambiar esa foto de perfil.
 Maybe, cambiar contraseña.
