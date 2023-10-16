@@ -39,7 +39,8 @@ Hacer alertas para login. ✔️
 Redireccionar despues de loguear.✔️
 Poder cerrar sesión.✔️
 
-Boton para mostrar las contraseñas, en el register y login.
+Agregar boton favoritos a los audios. Emote estrella.
+Boton para mostrar las contraseñas, login.✔️
 Hacer un boton para subir arriba del todo de la pagina.
 Arreglar estilos de la barra de audio en el home.
 Hacer pagina para los episodios favoritos.
