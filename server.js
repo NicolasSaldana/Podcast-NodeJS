@@ -58,6 +58,10 @@ app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
+app.get('/favoritos', (req, res) => {
+  return res.render('fav.ejs');
+});
+
 app.get('/logout', (req, res) => {
   if (req.session.isLoggedIn === true) {
     req.session.destroy();
@@ -382,6 +386,7 @@ app.post("/subemail", (req, res) => {
 
   console.log("working")
 });
+
 
 //Conectar a la BD
 db.connect((err) => {

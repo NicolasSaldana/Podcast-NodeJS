@@ -59,8 +59,8 @@ a {
   transition: 0.2s all ease-in-out !important;
   top: 0;
   font-size: 12px;
-  padding-top: 20px;
-  padding-bottom: 20px; }
+  /* padding-top: 20px; */
+  padding-bottom: 10px; }
   .btn:hover, .btn:active, .btn:focus {
     outline: none;
     -webkit-box-shadow: none !important;
@@ -70,7 +70,7 @@ a {
     border-color: #e6e7e9;
     color: #000; }
   .btn.btn-sm {
-    font-size: 0.9rem; }
+    font-size: 0.8rem; }
   .btn.btn-primary {
     font-weight: 300;
     letter-spacing: .2em; }
