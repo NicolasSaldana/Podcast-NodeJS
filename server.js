@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const multer = require('multer');
 const cors = require('cors')
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
@@ -7,7 +8,6 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const { error } = require('console');
 require('dotenv').config();
-
 
 const app = express();
 const port = 3000
@@ -43,13 +43,46 @@ app.use(session({
   }
 }));
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'ImagenesGuardadas/'); // Carpeta de destino para las imágenes subidas
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Nombre único para cada imagen
+  }
+});
+
+const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   return res.render('index.ejs');
 });
 
+app.get('/configuraciones', (req, res) => {
+  if (req.session.isLoggedIn === true) {
+    res.sendFile(path.join(__dirname, "/templates/configuraciones.html"));
+  } else {
+    res.redirect('/prelogin');
+  }
+})
+
+app.post('/configuraciones', upload.single('imagen'), (req, res) => {
+  const imagen = req.file; // Archivo subido por el usuario
+  const rutaImagen = imagen.path; // Ruta de la imagen en el sistema de archivos
+
+  // Guardar la ruta de la imagen en la base de datos
+  // ... Código para guardar en la base de datos ...
+  console.log("subio");
+  res.send('Imagen subida y guardada en la base de datos');
+});
+
 app.get('/favoritos', (req, res) => {
-  return res.render('fav.ejs');
+  if (req.session.isLoggedIn === true) {
+    res.render('fav.ejs', { nombre: req.session.nombre });
+    // console.log(req.session);
+  } else {
+    res.redirect('/prelogin');
+  }
 });
 
 app.get('/logout', (req, res) => {

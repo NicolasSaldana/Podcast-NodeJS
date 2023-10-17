@@ -42,15 +42,15 @@ Poder cerrar sesión.✔️
 Agregar boton favoritos a los audios. Emote estrella.
 Boton para mostrar las contraseñas, login.✔️
 Hacer un boton para subir arriba del todo de la pagina.✔️
-Arreglar estilos de la barra de audio en el home.
-Hacer pagina para los episodios favoritos.
+Arreglar estilos de la barra de audio en el home. ✔️
+Hacer pagina para los episodios favoritos.✔️ 
 
 Organizar los archivos, por carpetas.
 Agregar las imagenes y audios en el home.ejs.
-Areglar los audios de los podcast.
+Areglar los audios de los podcast.✔️
 
 Hacer el sistema de favoritos.
-Agregar una foto de perfil.
+Agregar una foto de perfil. 
 Poder cambiar esa foto de perfil.
 Maybe, cambiar contraseña.
 

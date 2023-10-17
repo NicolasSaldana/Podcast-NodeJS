@@ -72,7 +72,7 @@
                                                         
                                                         </i>Favoritos</a>
                                                 </li>
-                                                <li><a class="dropdown-item" href="configuraciones.html"><i
+                                                <li><a class="dropdown-item" href="/configuraciones"><i
                                                             class="bi bi-gear mr-2"></i>Configuraciones</a>
                                                 </li>
                                                 <!-- <li><a class="dropdown-item" href="#">Cambiar contraseña</a></li>
@@ -423,24 +423,24 @@
     <script src="assets/js/mediaelement-and-player.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var mediaElements = document.querySelectorAll('video, audio'),
-                total = mediaElements.length;
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     var mediaElements = document.querySelectorAll('video, audio'),
+        //         total = mediaElements.length;
 
-            for (var i = 0; i < total; i++) {
-                new MediaElementPlayer(mediaElements[i], {
-                    pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/',
-                    shimScriptAccess: 'always',
-                    success: function () {
-                        var target = document.body.querySelectorAll('.player'),
-                            targetTotal = target.length;
-                        for (var j = 0; j < targetTotal; j++) {
-                            target[j].style.visibility = 'visible';
-                        }
-                    }
-                });
-            }
-        });
+        //     for (var i = 0; i < total; i++) {
+        //         new MediaElementPlayer(mediaElements[i], {
+        //             pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/',
+        //             shimScriptAccess: 'always',
+        //             success: function () {
+        //                 var target = document.body.querySelectorAll('.player'),
+        //                     targetTotal = target.length;
+        //                 for (var j = 0; j < targetTotal; j++) {
+        //                     target[j].style.visibility = 'visible';
+        //                 }
+        //             }
+        //         });
+        //     }
+        // });
     </script>
 
     <script src="/templates/js/FormContact.js"></script>
