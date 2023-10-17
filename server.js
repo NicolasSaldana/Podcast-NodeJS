@@ -43,16 +43,6 @@ app.use(session({
   }
 }));
 
-// function isAuthenticated(req, res, next) {
-//   // Verificar si el usuario está autenticado
-//   if (req.session.isLoggedIn) {
-//     // Si el usuario está autenticado, continuar con la siguiente función en la cadena de middleware
-//     return next();
-//   } else {
-//     // Si el usuario no está autenticado, redirigir a una página de inicio de sesión o mostrar un mensaje de error
-//     return res.redirect('/prelogin');
-//   }
-// }
 
 app.get('/', (req, res) => {
   return res.render('index.ejs');
