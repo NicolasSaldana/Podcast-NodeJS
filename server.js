@@ -43,6 +43,7 @@ app.use(session({
   }
 }));
 
+//Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'ImagenesGuardadas/'); // Carpeta de destino para las imágenes subidas
@@ -51,7 +52,6 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname); // Nombre único para cada imagen
   }
 });
-
 const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
@@ -68,12 +68,42 @@ app.get('/configuraciones', (req, res) => {
 
 app.post('/configuraciones', upload.single('imagen'), (req, res) => {
   const imagen = req.file; // Archivo subido por el usuario
-  const rutaImagen = imagen.path; // Ruta de la imagen en el sistema de archivos
+  const rutaImagen = imagen.path.replace(/\\/g, '/'); // Reemplazar todas las barras invertidas "\" por barras normales "/"
 
-  // Guardar la ruta de la imagen en la base de datos
-  // ... Código para guardar en la base de datos ...
-  console.log("subio");
-  res.send('Imagen subida y guardada en la base de datos');
+  if (req.session.user) {
+    const nombre = req.session.user.nombre;
+    const email = req.session.user.email; // Utilizar la propiedad correcta para obtener el correo electrónico del usuario
+
+    try {
+      db.query('UPDATE cuentas SET ruta_imagen = ? WHERE email = ?', [rutaImagen, email], (error, results) => {
+        if (error) {
+          console.error(error);
+          res.status(500).send('Error al guardar la imagen en la base de datos');
+        } else {
+          // console.log('Imagen subida: ', { rutaImagen: results[0].ruta_imagen });
+          db.query('SELECT ruta_imagen FROM cuentas WHERE email = ?', [email], (error, results) => {
+            // res.render('home.ejs', { rutaImagen: results[0].ruta_imagen });
+            // res.send(results[0].ruta_imagen);
+            if (error) {
+              console.error(error);
+              res.status(500).send('Error al obtener la ruta de imagen de la base de datos');
+            } else {
+              // Renderizar la página de inicio del usuario y pasar la ruta de la imagen a la plantilla
+              const imagen = results[0].ruta_imagen;
+              res.json(imagen);
+            }
+          });
+        }
+      });
+      console.log("subio");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error en el servidor');
+    }
+  } else {
+    console.log('No se ha iniciado sesión');
+    res.status(401).send('No se ha iniciado sesión');
+  }
 });
 
 app.get('/favoritos', (req, res) => {
@@ -88,7 +118,7 @@ app.get('/favoritos', (req, res) => {
 app.get('/logout', (req, res) => {
   if (req.session.isLoggedIn === true) {
     req.session.destroy();
-  } 
+  }
   res.redirect('/');
 })
 
@@ -169,6 +199,11 @@ app.post('/prelogin', (req, res) => {
           console.log('La contraseña es correcta');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
+          req.session.user = {
+            nombre: nombre,
+            email: email
+          }
+          console.log("login" + req.session.user.email);
           // console.log('WELCOME');
           // console.log(nombre);
           return res.redirect('/loged');
@@ -293,6 +328,10 @@ app.post('/preregister', (req, res) => {
           console.log('Datos guardados correctamente en la base de datos.');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
+          req.session.user = {
+            nombre: nombre,
+            email: email
+          }
           return res.redirect('/loged');
         });
       })

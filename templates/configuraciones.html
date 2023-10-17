@@ -162,7 +162,8 @@
             if (file) {
                 img.src = URL.createObjectURL(file);
                 const formData = new FormData();
-                formData.append("imagen", file);
+                const fileName = file.name.replace(/\\/g, '/'); // Reemplazar todas las barras invertidas "\" por barras normales "/"
+                formData.append("imagen", file, fileName);
     
                 fetch("/configuraciones", {
                     method: "POST",
@@ -176,6 +177,7 @@
                         console.error(error);
                     });
             } else {
+                
                 img.src = defaultFile;
             }
         });
