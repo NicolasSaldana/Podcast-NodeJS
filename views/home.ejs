@@ -56,7 +56,8 @@
                                                 style="font-size: 0.0rem; background-color: white; border-color: white;"
                                                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bi bi-person-circle"
-                                                    style="font-size: 1.4rem; color: red;"></i>
+                                                    style="font-size: 1.4rem; color: black;"></i>
+                                                <!-- <img src="<%= imagen %>" alt=""> -->
                                             </a>
 
                                             <ul class="dropdown-menu">
@@ -69,7 +70,7 @@
                                                 </li>
                                                 <li><a class="dropdown-item" href="/favoritos"><i
                                                             class="bi bi-star mr-2">
-                                                        
+
                                                         </i>Favoritos</a>
                                                 </li>
                                                 <li><a class="dropdown-item" href="/configuraciones"><i
@@ -116,6 +117,14 @@
                 </div>
                 <div class="col-lg-6" style="margin-left: auto;">
                     <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded">
+                    <!-- <% if (imagen) { %>
+                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
+                    <% } %> -->
+                    <% if (imagen) { %>
+                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
+                        <% } else { %>
+                            <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded"> 
+                            <% } %>
                 </div>
             </div>
         </div>

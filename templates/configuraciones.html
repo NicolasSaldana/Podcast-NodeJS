@@ -103,6 +103,7 @@
 
                         <input type="file" name="inputFileServer" id="inputFileServer" accept="image/png"
                             style="display: none;">
+                        <h6 class="">Solo se aceptan formatos JPG o PNG.</h6>
                         <label for="inputFileServer" class="btn btn-primary text-black"
                             data-sb-validations="required">Cambiar Foto
                             <!-- <span class="text-primary">*</span> -->
@@ -177,7 +178,6 @@
                         console.error(error);
                     });
             } else {
-                
                 img.src = defaultFile;
             }
         });

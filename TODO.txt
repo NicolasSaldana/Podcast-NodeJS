@@ -39,19 +39,21 @@ Hacer alertas para login. ✔️
 Redireccionar despues de loguear.✔️
 Poder cerrar sesión.✔️
 
-Agregar boton favoritos a los audios. Emote estrella.
 Boton para mostrar las contraseñas, login.✔️
 Hacer un boton para subir arriba del todo de la pagina.✔️
 Arreglar estilos de la barra de audio en el home. ✔️
 Hacer pagina para los episodios favoritos.✔️ 
 
-Organizar los archivos, por carpetas.
-Agregar las imagenes y audios en el home.ejs.
+Agregar las imagenes y audios en el home.ejs. ✔️
 Areglar los audios de los podcast.✔️
+Agregar una foto de perfil. ✔️
+Poder cambiar esa foto de perfil.✔️
 
+Cambiar el icono del pibe por la imagen. 
+Si la imagen se borra de la carpeta no enviar nada al ejs. 
+Agregar boton favoritos a los audios. Emote estrella.
 Hacer el sistema de favoritos.
-Agregar una foto de perfil. 
-Poder cambiar esa foto de perfil.
+Organizar los archivos, por carpetas.✔️
 Maybe, cambiar contraseña.
 
 

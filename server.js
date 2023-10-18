@@ -17,6 +17,7 @@ app.set('views', path.join(__dirname, "/views"))
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.static(__dirname + 'href="/css/style.css">'));
+app.use("/ImagenesGuardadas", express.static(path.join(__dirname, "/ImagenesGuardadas")));
 app.use("/templates", express.static(path.join(__dirname, "/templates")));
 
 // Configurar la conexión a la base de datos
@@ -80,16 +81,14 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
           console.error(error);
           res.status(500).send('Error al guardar la imagen en la base de datos');
         } else {
-          // console.log('Imagen subida: ', { rutaImagen: results[0].ruta_imagen });
           db.query('SELECT ruta_imagen FROM cuentas WHERE email = ?', [email], (error, results) => {
-            // res.render('home.ejs', { rutaImagen: results[0].ruta_imagen });
-            // res.send(results[0].ruta_imagen);
             if (error) {
               console.error(error);
               res.status(500).send('Error al obtener la ruta de imagen de la base de datos');
             } else {
               // Renderizar la página de inicio del usuario y pasar la ruta de la imagen a la plantilla
               const imagen = results[0].ruta_imagen;
+              req.session.imagen = imagen;
               res.json(imagen);
             }
           });
@@ -124,7 +123,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/loged', (req, res) => {
   if (req.session.isLoggedIn === true) {
-    res.render('home.ejs', { nombre: req.session.nombre });
+    res.render('home.ejs', { nombre: req.session.nombre , imagen: req.session.imagen });
     // console.log(req.session);
   } else {
     res.redirect('/prelogin');
@@ -174,7 +173,7 @@ app.post('/prelogin', (req, res) => {
 
   //Consulta SQL para verificar si existe el correo electrónico. Ademas obtengo el nombre del usuario y la contraseña en la consulta.
   //La variable count, NO CONFUNDIR CON EL COUNT(*), es el conteo de filas en donde coincide con el email proporcionado.  
-  const checkEmailQuery = `SELECT COUNT(*) AS count, nombre, contraseña FROM cuentas WHERE email = ?`;
+  const checkEmailQuery = `SELECT COUNT(*) AS count, nombre, contraseña, ruta_imagen FROM cuentas WHERE email = ?`;
   const checkEmailValues = [email];
 
   db.query(checkEmailQuery, checkEmailValues, (err, result) => {
@@ -186,6 +185,7 @@ app.post('/prelogin', (req, res) => {
     const count = result[0].count;
     const storedPassword = result[0].contraseña;
     const nombre = result[0].nombre;
+    const imagen = result[0].ruta_imagen;
 
     if (count > 0) {
       //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
@@ -199,13 +199,14 @@ app.post('/prelogin', (req, res) => {
           console.log('La contraseña es correcta');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
+          req.session.imagen = imagen;
           req.session.user = {
             nombre: nombre,
             email: email
           }
-          console.log("login" + req.session.user.email);
           // console.log('WELCOME');
           // console.log(nombre);
+          console.log("login" + imagen);
           return res.redirect('/loged');
 
         } else {
