@@ -56,7 +56,8 @@
                                                 style="font-size: 0.0rem; background-color: white; border-color: white;"
                                                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bi bi-person-circle"
-                                                    style="font-size: 1.4rem; color: red;"></i>
+                                                    style="font-size: 1.4rem; color: black;"></i>
+                                                <!-- <img src="<%= imagen %>" alt=""> -->
                                             </a>
 
                                             <ul class="dropdown-menu">
@@ -69,7 +70,7 @@
                                                 </li>
                                                 <li><a class="dropdown-item" href="/favoritos"><i
                                                             class="bi bi-star mr-2">
-                                                        
+
                                                         </i>Favoritos</a>
                                                 </li>
                                                 <li><a class="dropdown-item" href="/configuraciones"><i
@@ -115,7 +116,14 @@
                         tendencias hasta los problemas que enfrentamos en nuestra vida diaria</p>
                 </div>
                 <div class="col-lg-6" style="margin-left: auto;">
-                    <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded">
+                    <!-- <% if (imagen) { %>
+                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
+                    <% } %> -->
+                    <% if (imagen) { %>
+                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
+                        <% } else { %>
+                            <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded"> 
+                            <% } %>
                 </div>
             </div>
         </div>
@@ -134,7 +142,7 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="images/person_1.jpg" alt="Image" class="img-fluid mr-2">
+                                        <img src="assets/images/person_1.jpg" alt="Image" class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Nicolas Saldaña</span>
                                             <span class="small">C.E.O</span>
@@ -145,7 +153,7 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="images/person_2.jpg" alt="Image" class="img-fluid mr-2">
+                                        <img src="assets/images/person_2.jpg" alt="Image" class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Benito Tridella</span>
                                             <span class="small">Community Manager</span>
@@ -156,7 +164,7 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="images/person_3.jpg" alt="Image" class="img-fluid mr-2">
+                                        <img src="assets/images/person_3.jpg" alt="Image" class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Verdondoni Máximo</span>
                                             <span class="small">Desarrollador</span>
