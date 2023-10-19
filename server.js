@@ -107,7 +107,7 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
 
 app.get('/favoritos', (req, res) => {
   if (req.session.isLoggedIn === true) {
-    res.render('fav.ejs', { nombre: req.session.nombre });
+    res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
     // console.log(req.session);
   } else {
     res.redirect('/prelogin');
@@ -132,7 +132,7 @@ app.get('/loged', (req, res) => {
 
 app.get('/about', (req, res) => {
   if (req.session.isLoggedIn === true) {
-    res.render('about.ejs', { nombre: req.session.nombre });
+    res.render('about.ejs', { nombre: req.session.nombre , imagen: req.session.imagen});
     // console.log(req.session);
   } else {
     res.sendFile(path.join(__dirname, "templates/about.html"));

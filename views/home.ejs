@@ -17,7 +17,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.7/build/mediaelementplayer.min.css">
     <link rel="stylesheet" href="/assets/css/aos.css">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .favorite-button {
+            position: absolute;
+            padding: inherit;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            color: #3ca59d;
+            font-size: 20px;
+            cursor: pointer;
+        }
 
+        .favorite-button:hover {
+            color: #ffcc00;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,13 +72,19 @@
                                             <a class="btn btn-primary dropdown-toggle"
                                                 style="font-size: 0.0rem; background-color: white; border-color: white;"
                                                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-person-circle"
-                                                    style="font-size: 1.4rem; color: black;"></i>
-                                                <!-- <img src="<%= imagen %>" alt=""> -->
+                                                <!-- <i class="bi bi-person-circle"
+                                                    style="font-size: 1.4rem; color: black;"></i> -->
+                                                <img src="<%= imagen %>" alt="" class="rounded-circle"
+                                                    style="width: 30px; height: 30px;">
                                             </a>
 
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item text-center">
+                                                <li>
+                                                    <a class="dropdown-item text-center">
+                                                        <img src="<%= imagen %>"
+                                                            style="margin-bottom: 10px; width: 80px; height: 80px; border-radius: 50%;"
+                                                            alt="">
+                                                        <br>
                                                         <%= nombre %>
                                                     </a>
                                                 </li>
@@ -76,8 +99,6 @@
                                                 <li><a class="dropdown-item" href="/configuraciones"><i
                                                             class="bi bi-gear mr-2"></i>Configuraciones</a>
                                                 </li>
-                                                <!-- <li><a class="dropdown-item" href="#">Cambiar contraseña</a></li>
-                                                <li><a class="dropdown-item" href="#">Cambiar Foto de perfil</a></li> -->
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
@@ -116,15 +137,15 @@
                         tendencias hasta los problemas que enfrentamos en nuestra vida diaria</p>
                 </div>
                 <div class="col-lg-6" style="margin-left: auto;">
-                    <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded">
+                    <!-- <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded"> -->
                     <!-- <% if (imagen) { %>
                         <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
                     <% } %> -->
-                    <% if (imagen) { %>
+                    <!-- <% if (imagen) { %>
                         <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
                         <% } else { %>
-                            <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded"> 
-                            <% } %>
+                            <% } %> -->
+                    <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded">
                 </div>
             </div>
         </div>
@@ -143,7 +164,8 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="../assets/images/nikkov image.jpeg" alt="Image" class="img-fluid mr-2">
+                                        <img src="../assets/images/nikkov image.jpeg" alt="Image"
+                                            class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Nicolas Saldaña</span>
                                             <span class="small">C.E.O</span>
@@ -154,7 +176,8 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="../assets/images/benito image.jpeg" alt="Image" class="img-fluid mr-2">
+                                        <img src="../assets/images/benito image.jpeg" alt="Image"
+                                            class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Benito Tridella</span>
                                             <span class="small">Community Manager</span>
@@ -165,7 +188,8 @@
 
                                 <li>
                                     <a href="#" class="d-flex align-items-center">
-                                        <img src="../assets/images/verdon image.jpeg" alt="Image" class="img-fluid mr-2">
+                                        <img src="../assets/images/verdon image.jpeg" alt="Image"
+                                            class="img-fluid mr-2">
                                         <div class="podcaster">
                                             <span class="d-block">Verdondoni Máximo</span>
                                             <span class="small">Desarrollador</span>
@@ -192,6 +216,7 @@
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>...<span
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span></div>
 
+                                <button class="favorite-button"><i class="bi bi-star"></i></button>
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
                                         <source
@@ -205,13 +230,13 @@
 
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');">
-                                <img src="../assets/images/Logo.png" alt="">
+                                <img src="#" alt="">
                             </div>
                             <div class="text">
                                 <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 02: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>...<span
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span></div>
-
+                                <button class="favorite-button"><i class="bi bi-star"></i></button>
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
                                         <source
@@ -225,15 +250,15 @@
 
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');">
-                                <img src="../assets/images/Logo.png" alt="">
+                                <img src="" alt="">
                             </div>
                             <div class="text">
                                 <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 03: ...</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small> ... <span
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> ... </small></span>
-
-                                </div>
+                                        </div>
+                                <button class="favorite-button"><i class="bi bi-star"></i></button>
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
                                         <source src="http://www.largesound.com/ashborytour/sound/AshboryBYU.mp3"
@@ -246,7 +271,7 @@
 
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');">
-                                <img src="../assets/images/Logo.png" alt="">
+                                <img src="" alt="">
                             </div>
                             <div class="text">
                                 <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 04: ...</h3>
@@ -254,6 +279,8 @@
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> ... </small></span>
                                 </div>
+                                <button class="favorite-button"><i class="bi bi-star"></i></button>
+
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
                                         <source src="http://www.largesound.com/ashborytour/sound/AshboryBYU.mp3"
@@ -266,7 +293,7 @@
 
                         <div class="d-block d-md-flex podcast-entry bg-white mb-5" data-aos="fade-up">
                             <div class="image" style="background-image: url('#');">
-                                <img src="../assets/images/Logo.png" alt="">
+                                <img src="" alt="">
                             </div>
                             <div class="text">
                                 <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 05: ...</h3>
@@ -274,6 +301,7 @@
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> . ..</small></span></div>
 
+                                            <button class="favorite-button"><i class="bi bi-star"></i></button>
 
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">

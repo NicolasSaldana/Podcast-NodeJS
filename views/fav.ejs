@@ -96,13 +96,19 @@
                                             <a class="btn btn-primary dropdown-toggle"
                                                 style="font-size: 0.0rem; background-color: white; border-color: white;"
                                                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-person-circle"
-                                                    style="font-size: 1.4rem; color: red;"></i>
+                                                <!-- <i class="bi bi-person-circle"
+                                                    style="font-size: 1.4rem; color: black;"></i> -->
+                                                <img src="<%= imagen %>" alt="" class="rounded-circle"
+                                                    style="width: 30px; height: 30px;">
                                             </a>
 
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item text-center">
-                                                        <%= nombre %> 
+                                                <li>
+                                                    <a class="dropdown-item text-center">
+                                                        <img src="<%= imagen %>" 
+                                                            style="margin-bottom: 10px; width: 80px; height: 80px; border-radius: 50%;" alt="">
+                                                        <br>
+                                                        <%= nombre %>
                                                     </a>
                                                 </li>
                                                 <li>

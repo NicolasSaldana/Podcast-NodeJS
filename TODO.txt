@@ -49,11 +49,13 @@ Areglar los audios de los podcast.✔️
 Agregar una foto de perfil. ✔️
 Poder cambiar esa foto de perfil.✔️
 
-Cambiar el icono del pibe por la imagen. 
-Si la imagen se borra de la carpeta no enviar nada al ejs. 
-Agregar boton favoritos a los audios. Emote estrella.
-Hacer el sistema de favoritos.
 Organizar los archivos, por carpetas.✔️
+
+Cambiar el icono del pibe por la imagen. ✔️
+Agregar boton favoritos a los audios. Emote estrella.✔️
+Poner de subir arriba del todo en todas las templates.
+Si la imagen se borra de la carpeta no enviar nada al ejs. 
+Hacer el sistema de favoritos.
 Maybe, cambiar contraseña.
 
 
