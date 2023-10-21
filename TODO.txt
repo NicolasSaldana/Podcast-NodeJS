@@ -53,8 +53,11 @@ Organizar los archivos, por carpetas.✔️
 
 Cambiar el icono del pibe por la imagen. ✔️
 Agregar boton favoritos a los audios. Emote estrella.✔️
-Poner de subir arriba del todo en todas las templates.
-Si la imagen se borra de la carpeta no enviar nada al ejs. 
+
+Poner de subir arriba del todo en todas las templates.✔️
+Si no existe la foto poner una default.✔️
+Si la imagen se borra de la carpeta no enviar nada al ejs. ✔️
+
 Hacer el sistema de favoritos.
 Maybe, cambiar contraseña.
 

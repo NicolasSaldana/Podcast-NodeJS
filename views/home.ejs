@@ -19,6 +19,69 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
+        .go-top-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            z-index: -1;
+        }
+
+        .go-top-button {
+            width: 0rem;
+            height: 0rem;
+            background: #2071b2;
+            border-radius: 50%;
+            cursor: pointer;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .go-top-button i {
+            position: absolute;
+            font-size: 1.7rem;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            color: white;
+            transition: .2s;
+        }
+
+        .show {
+            z-index: 10;
+        }
+
+        .show .go-top-button {
+            animation: popup .3s ease-in-out;
+            width: 3.5rem;
+            height: 3.5rem;
+            z-index: 11;
+        }
+
+        .show i {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        @keyframes popup {
+            0% {
+                width: 0rem;
+                height: 0rem;
+            }
+
+            50% {
+                width: 4.5rem;
+                height: 4.5rem;
+            }
+
+            100% {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+        }
+
         .favorite-button {
             position: absolute;
             padding: inherit;
@@ -74,16 +137,17 @@
                                                 href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <!-- <i class="bi bi-person-circle"
                                                     style="font-size: 1.4rem; color: black;"></i> -->
-                                                <img src="<%= imagen %>" alt="" class="rounded-circle"
+                                                <img src="<%= imagen %>" alt="Imagen eliminada" class="rounded-circle"
                                                     style="width: 30px; height: 30px;">
+
                                             </a>
 
                                             <ul class="dropdown-menu">
                                                 <li>
                                                     <a class="dropdown-item text-center">
-                                                        <img src="<%= imagen %>"
-                                                            style="margin-bottom: 10px; width: 80px; height: 80px; border-radius: 50%;"
-                                                            alt="">
+                                                        <img src="<%= imagen %>" alt="FUNCIONO" class="rounded-circle"
+                                                            style="width: 60px; height: 60px;">
+
                                                         <br>
                                                         <%= nombre %>
                                                     </a>
@@ -257,7 +321,7 @@
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small> ... <span
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> ... </small></span>
-                                        </div>
+                                </div>
                                 <button class="favorite-button"><i class="bi bi-star"></i></button>
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
@@ -301,7 +365,7 @@
                                                 class="sep">/</span>
                                             ... <span class="sep">/</span> . ..</small></span></div>
 
-                                            <button class="favorite-button"><i class="bi bi-star"></i></button>
+                                <button class="favorite-button"><i class="bi bi-star"></i></button>
 
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
@@ -447,6 +511,12 @@
         </footer>
     </div>
 
+    <div class="go-top-container">
+        <div class="go-top-button">
+            <i class="bi bi-arrow-up"></i>
+        </div>
+    </div>
+
     <script src="assets/js/jquery-3.3.1.min.js"></script>
     <script src="assets/js/jquery-migrate-3.0.1.min.js"></script>
     <script src="assets/js/jquery-ui.js"></script>
@@ -467,6 +537,20 @@
     <script src="assets/js/mediaelement-and-player.min.js"></script>
 
     <script>
+        window.onscroll = function () {
+            if (document.documentElement.scrollTop > 100) {
+                document.querySelector('.go-top-container').classList.add('show');
+            } else {
+                document.querySelector('.go-top-container').classList.remove('show');
+            }
+        }
+        document.querySelector('.go-top-container').addEventListener('click', () => {
+            console.log('click');
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        })
         // document.addEventListener('DOMContentLoaded', function () {
         //     var mediaElements = document.querySelectorAll('video, audio'),
         //         total = mediaElements.length;

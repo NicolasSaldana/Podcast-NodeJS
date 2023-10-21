@@ -8,7 +8,9 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const { error } = require('console');
 require('dotenv').config();
+const fs = require('fs');
 
+const imgDefault = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 const app = express();
 const port = 3000
 
@@ -68,12 +70,12 @@ app.get('/configuraciones', (req, res) => {
 })
 
 app.post('/configuraciones', upload.single('imagen'), (req, res) => {
-  const imagen = req.file; // Archivo subido por el usuario
+  const imagen = req.file;
   const rutaImagen = imagen.path.replace(/\\/g, '/'); // Reemplazar todas las barras invertidas "\" por barras normales "/"
 
   if (req.session.user) {
     const nombre = req.session.user.nombre;
-    const email = req.session.user.email; // Utilizar la propiedad correcta para obtener el correo electrónico del usuario
+    const email = req.session.user.email;
 
     try {
       db.query('UPDATE cuentas SET ruta_imagen = ? WHERE email = ?', [rutaImagen, email], (error, results) => {
@@ -86,7 +88,7 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
               console.error(error);
               res.status(500).send('Error al obtener la ruta de imagen de la base de datos');
             } else {
-              // Renderizar la página de inicio del usuario y pasar la ruta de la imagen a la plantilla
+
               const imagen = results[0].ruta_imagen;
               req.session.imagen = imagen;
               res.json(imagen);
@@ -106,9 +108,24 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
 });
 
 app.get('/favoritos', (req, res) => {
+  // if (req.session.isLoggedIn === true) {
+  //   res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+  //   // console.log(req.session);
+  // } else {
+  //   res.redirect('/prelogin');
+  // }
   if (req.session.isLoggedIn === true) {
-    res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
-    // console.log(req.session);
+    const imagenPath = path.join(__dirname, req.session.imagen);
+    
+
+    // Verificar si la imagen existe en la carpeta
+    fs.access(imagenPath, fs.constants.F_OK, (err) => {
+      if (err) {
+        res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+      } else {
+        res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+      }
+    });
   } else {
     res.redirect('/prelogin');
   }
@@ -122,20 +139,54 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/loged', (req, res) => {
+  // if (req.session.isLoggedIn === true) {
+  //   res.render('home.ejs', { nombre: req.session.nombre , imagen: req.session.imagen });
+  //   // console.log(req.session);
+  // } else {
+  //   res.redirect('/prelogin');
+  // }
   if (req.session.isLoggedIn === true) {
-    res.render('home.ejs', { nombre: req.session.nombre , imagen: req.session.imagen });
-    // console.log(req.session);
+    if (req.session.imagen === undefined) {
+      req.session.imagen = imgDefault;
+      console.log("4kt");
+      return res.render('home.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+    }
+
+    const imagenPath = path.join(__dirname, req.session.imagen);
+
+    // Verificar si la imagen existe en la carpeta
+    fs.access(imagenPath, fs.constants.F_OK, (err) => {
+      if (err) {
+        return res.render('home.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+      } else {
+        return res.render('home.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+      }
+    });
   } else {
     res.redirect('/prelogin');
   }
 })
 
 app.get('/about', (req, res) => {
+  // if (req.session.isLoggedIn === true) {
+  //   res.render('about.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+  //   // console.log(req.session);
+  // } else {
+  //   res.sendFile(path.join(__dirname, "templates/about.html"));
+  // }
   if (req.session.isLoggedIn === true) {
-    res.render('about.ejs', { nombre: req.session.nombre , imagen: req.session.imagen});
-    // console.log(req.session);
+    const imagenPath = path.join(__dirname, req.session.imagen);
+
+    // Verificar si la imagen existe en la carpeta
+    fs.access(imagenPath, fs.constants.F_OK, (err) => {
+      if (err) {
+        res.render('about.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+      } else {
+        res.render('about.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+      }
+    });
   } else {
-    res.sendFile(path.join(__dirname, "templates/about.html"));
+    res.redirect('/prelogin');
   }
 });
 
@@ -185,7 +236,11 @@ app.post('/prelogin', (req, res) => {
     const count = result[0].count;
     const storedPassword = result[0].contraseña;
     const nombre = result[0].nombre;
-    const imagen = result[0].ruta_imagen;
+    let imagen = result[0].ruta_imagen;
+
+    // if (imagen === null) {
+    //   imagen = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+    // }
 
     if (count > 0) {
       //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
@@ -199,7 +254,7 @@ app.post('/prelogin', (req, res) => {
           console.log('La contraseña es correcta');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
-          req.session.imagen = imagen;
+          // req.session.imagen = imagen;
           req.session.user = {
             nombre: nombre,
             email: email
@@ -329,11 +384,12 @@ app.post('/preregister', (req, res) => {
           console.log('Datos guardados correctamente en la base de datos.');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
+          req.session.imagen = imgDefault;
           req.session.user = {
             nombre: nombre,
             email: email
           }
-          return res.redirect('/loged');
+          res.redirect('/loged');
         });
       })
     }
