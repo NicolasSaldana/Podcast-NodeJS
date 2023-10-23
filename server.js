@@ -116,14 +116,13 @@ app.get('/favoritos', (req, res) => {
   // }
   if (req.session.isLoggedIn === true) {
     const imagenPath = path.join(__dirname, req.session.imagen);
-    
 
     // Verificar si la imagen existe en la carpeta
     fs.access(imagenPath, fs.constants.F_OK, (err) => {
       if (err) {
-        res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+        return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault });
       } else {
-        res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+        return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
       }
     });
   } else {
@@ -139,22 +138,8 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/loged', (req, res) => {
-  // if (req.session.isLoggedIn === true) {
-  //   res.render('home.ejs', { nombre: req.session.nombre , imagen: req.session.imagen });
-  //   // console.log(req.session);
-  // } else {
-  //   res.redirect('/prelogin');
-  // }
   if (req.session.isLoggedIn === true) {
-    if (req.session.imagen === undefined) {
-      req.session.imagen = imgDefault;
-      console.log("4kt");
-      return res.render('home.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
-    }
-
     const imagenPath = path.join(__dirname, req.session.imagen);
-
-    // Verificar si la imagen existe en la carpeta
     fs.access(imagenPath, fs.constants.F_OK, (err) => {
       if (err) {
         return res.render('home.ejs', { nombre: req.session.nombre, imagen: imgDefault });
@@ -162,6 +147,7 @@ app.get('/loged', (req, res) => {
         return res.render('home.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
       }
     });
+    // console.log(req.session);
   } else {
     res.redirect('/prelogin');
   }
@@ -176,17 +162,16 @@ app.get('/about', (req, res) => {
   // }
   if (req.session.isLoggedIn === true) {
     const imagenPath = path.join(__dirname, req.session.imagen);
-
-    // Verificar si la imagen existe en la carpeta
     fs.access(imagenPath, fs.constants.F_OK, (err) => {
       if (err) {
-        res.render('about.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+        return res.render('about.ejs', { nombre: req.session.nombre, imagen: imgDefault });
       } else {
-        res.render('about.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+        return res.render('about.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
       }
     });
+    // console.log(req.session);
   } else {
-    res.redirect('/prelogin');
+    res.sendFile(path.join(__dirname, "templates/about.html"));
   }
 });
 
@@ -254,7 +239,10 @@ app.post('/prelogin', (req, res) => {
           console.log('La contraseña es correcta');
           req.session.isLoggedIn = true;
           req.session.nombre = nombre;
-          // req.session.imagen = imagen;
+          req.session.imagen = imagen;
+          if (imagen === null) {
+            req.session.imagen = imgDefault;
+          }
           req.session.user = {
             nombre: nombre,
             email: email
