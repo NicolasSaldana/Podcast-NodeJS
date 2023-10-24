@@ -10,6 +10,8 @@ function FormContact() {
     const mensaje = document.querySelector('#c_message').value;
 
     if (nombre === "" && email === "" && tema === "" && mensaje === "") {
+        mensajeElement.classList.remove("alert-primary");
+        mensajeElement.classList.add("alert-danger");
         mensajeElement.textContent = "Complete los campos obligatorios";
         return;
     }

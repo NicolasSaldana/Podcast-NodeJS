@@ -139,14 +139,6 @@
                         tendencias hasta los problemas que enfrentamos en nuestra vida diaria</p>
                 </div>
                 <div class="col-lg-6" style="margin-left: auto;">
-                    <!-- <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded"> -->
-                    <!-- <% if (imagen) { %>
-                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
-                    <% } %> -->
-                    <!-- <% if (imagen) { %>
-                        <img src="<%= imagen %>" alt="FUNCIONO" class="img-fluid rounded">
-                        <% } else { %>
-                            <% } %> -->
                     <img src="assets/images/1x/4x.jpg" alt="Image" class="img-fluid rounded">
                 </div>
             </div>
@@ -394,7 +386,7 @@
                                 <div class="form-group row">
                                     <div class="col-lg-12">
                                         <input type="submit" class="btn btn-primary btn-lg" onclick="FormContact()"
-                                            id="enviar" value="Enviar">
+                                            id="enviar" style="font-size: 12px; background-color: #2EBAF2; border-color: #2EBAF2;" value="Enviar">
                                     </div>
                                 </div>
                             </div>
@@ -434,7 +426,6 @@
                         <ul class="list-unstyled">
                             <li><a href="/about">Acerca de nosotros</a></li>
                             <li><a href="/logout">Cerrar Sesion</a></li>
-                            <!-- <li><a href="/prelogin">Ingresa/Registrate</a></li> -->
                         </ul>
                     </div>
                     <div class="col-lg-4" name="subemail">
@@ -445,7 +436,7 @@
                         <div id="mensaje" class="alert alert-primary" style="display: none;" role="alert">
                             <!-- text -->
                         </div>
-                        <input type="submit" class="btn btn-primary" onclick="subscribe()" id="subemailButton">
+                        <input type="submit" class="btn btn-primary" style="font-size: 12px; background-color: #2EBAF2; border-color: #2EBAF2;" onclick="subscribe()" id="subemailButton">
                     </div>
                 </div>
             </div>
@@ -517,14 +508,14 @@
         // Agrega un controlador de eventos clic a cada botón
         favoriteButtons.forEach(button => {
             button.addEventListener("click", function () {
-                // Obtiene la URL del archivo de audio desde el atributo data-audio-src
+                // URL  de audio desde el atributo data-audio-src
                 const audioSrc = button.getAttribute("data-audio-src");
                 fetch("/favoritos", {
-                    method: "POST", // Puedes ajustar el método HTTP según tus necesidades
+                    method: "POST", 
                     headers: {
-                        "Content-Type": "application/json", // Puedes ajustar los encabezados según tus necesidades
+                        "Content-Type": "application/json", 
                     },
-                    body: JSON.stringify({ audioSrc }), // Puedes enviar datos adicionales si es necesario
+                    body: JSON.stringify({ audioSrc }), 
                 })
                     .then(response => {
                         if (response.ok) {

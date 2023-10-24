@@ -110,6 +110,12 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
 });
 
 app.get('/favoritos', (req, res) => {
+  // if (req.session.isLoggedIn === true) {
+  //   res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+  //   // console.log(req.session);
+  // } else {
+  //   res.redirect('/prelogin');
+  // }
   if (req.session.isLoggedIn === true) {
     const imagenPath = path.join(__dirname, req.session.imagen);
     const folderPath = path.resolve(__dirname, 'AudiosFavoritos/');
@@ -117,27 +123,17 @@ app.get('/favoritos', (req, res) => {
       if (err) {
         console.error('Error al leer la carpeta de audios:', err);
       } else {
+        // Devuelve la lista de archivos como respuesta en formato JSON
         const audios = files.map(file => `/AudiosFavoritos/${path.basename(file)}`);
         console.log("Audios guardados:" + files);
-        let imagenExists = false;
         // Verificar si la imagen existe en la carpeta
-        if (fs.existsSync(imagenPath)) {
-          imagenExists = true;
-        }
-        if (files.length === 0) {
-          console.log("No hay archivos guardados");
-          if (imagenExists) {
-            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: [] });
-          } else {
-            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: [] });
-          }
-        } else {
-          if (imagenExists) {
-            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audios });
-          } else {
+        fs.access(imagenPath, fs.constants.F_OK, (err) => {
+          if (err) {
             return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: audios });
+          } else {
+            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audios });
           }
-        }
+        });
       }
     });
   } else {
@@ -147,7 +143,7 @@ app.get('/favoritos', (req, res) => {
 
 app.post('/favoritos', (req, res) => {
   const audioSrc = req.body.audioSrc;
-  // console.log(audioSrc);
+  console.log(audioSrc);
 
   // Obtiene el nombre del archivo de audio de la ruta
   const fileName = path.basename(audioSrc);
@@ -166,6 +162,16 @@ app.post('/favoritos', (req, res) => {
     } else {
       console.log('Archivo de audio guardado exitosamente');
       res.status(200).json('Archivo de audio guardado exitosamente');
+      // fs.readdir(folderPath, (err, files) => {
+      //   if (err) {
+      //     console.error('Error al leer la carpeta de audios:', err);
+      //     res.status(500).json( 'Error al obtener la lista de audios' );
+      //   } else {
+      //     // Devuelve la lista de archivos como respuesta en formato JSON
+      //     req.session.audios = files
+      //     console.log(req.session.audios);
+      //   }
+      // });
     }
   });
 });

@@ -149,60 +149,59 @@
 
         </header>
 
-
         <div class="container mt-5 mb-5">
             <div class="d-flex justify-content-center row">
                 <div class="col-md-10">
-                    <% if(audios.length===0){ %>
-                        <div class="row p-2 bg-white border rounded" style="margin-top: 15px;">
-                            <h3>No hay podcast favoritos. <a href="/loged" style="color: #2EBAF2;">Volver.</a></h3>
-                        </div>
-                        <!-- <div class="alert alert-danger" role="alert">
+                    <!-- <% if(audios.length === 0){ %> -->
+                    <div class="row p-2 bg-white border rounded" style="margin-top: 15px;">
+                        <h3>No hay podcast favoritos. <a href="/loged" style="color: #2EBAF2;">Volver.</a></h3>
+                    </div>
+                    <!-- <div class="alert alert-danger" role="alert">
                             No hay podcast favoritos.
                         </div> -->
 
-                        <% } else{ %>
-                            <% for (let i=0; i < audios.length; i++) { %>
-                                <div class="row p-2 bg-white border rounded" style="margin-top: 15px;">
-                                    <div class="col-md-3 mt-1">
-                                        <img class="img-fluid img-responsive rounded product-image"
-                                            src="../assets/images/sexuqal.png">
+                    <!-- <% } else{ %> -->
+                    <% for (let i=0; i < audios.length; i++) { %>
+                        <div class="row p-2 bg-white border rounded" style="margin-top: 15px;">
+                            <div class="col-md-3 mt-1">
+                                <img class="img-fluid img-responsive rounded product-image"
+                                    src="../assets/images/sexuqal.png">
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <h5>Laburar #1</h5>
+                                <div class="d-flex flex-row">
+                                    <div class="ratings mr-2">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
                                     </div>
-                                    <div class="col-md-6 mt-1">
-                                        <h5>Laburar #1</h5>
-                                        <div class="d-flex flex-row">
-                                            <div class="ratings mr-2">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                            <span></span>
-                                        </div>
-                                        <p class="text-justify text-truncate para mb-0">
-                                        <div class="player">
-                                            <br>
-                                            <audio id="player<%= i %>" preload="none" controls style="max-width: 100%">
-                                                <source src="<%= audios[i] %>" type="audio/mp3">
-                                            </audio>
-                                            <br>
-                                        </div>
-                                        </p>
-                                    </div>
-                                    <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <h4 class="mr-1"></h4>
-                                            <span class="strike-text"></span>
-                                        </div>
-                                        <div class="d-flex flex-column mt-4">
-                                            <button class="btn btn-outline-primary btn-sm mt-2" type="button">Eliminar
-                                                de
-                                                favoritos</button>
-                                        </div>
-                                    </div>
+                                    <span></span>
                                 </div>
-                                <% } %>
-                                    <% } %>
+                                <p class="text-justify text-truncate para mb-0">
+                                <div class="player">
+                                    <br>
+                                    <audio id="player<%= i %>" preload="none" controls style="max-width: 100%">
+                                        <source src="<%= audios[i] %>" type="audio/mp3">
+                                    </audio>
+                                    <br>
+                                </div>
+                                </p>
+                            </div>
+                            <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                                <div class="d-flex flex-row align-items-center">
+                                    <h4 class="mr-1"></h4>
+                                    <span class="strike-text"></span>
+                                </div>
+                                <div class="d-flex flex-column mt-4">
+                                    <button class="btn btn-outline-primary btn-sm mt-2" type="button">Eliminar
+                                        de
+                                        favoritos</button>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                            <!-- <% } %> -->
 
                 </div>
             </div>
