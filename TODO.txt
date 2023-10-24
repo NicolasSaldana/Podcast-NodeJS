@@ -58,12 +58,12 @@ Poner de subir arriba del todo en todas las templates.✔️
 Si no existe la foto poner una default.✔️
 Si la imagen se borra de la carpeta no enviar nada al ejs. ✔️
 
-Mover los estilos y scripts a un archivo aparte
-Hacer el sistema de favoritos:
+Mover los estilos y scripts a un archivo aparte ✔️
 
-- Primero guardar los audios en la carpeta como las imagenes o en la BD.
-- Si se guardar en la BD, como guardar mas de un audio en un mismo atributo.
+Hacer el sistema de favoritos:
+- Primero guardar los audios en la carpeta como las imagenes o en la BD.✔️ 
 - Localizar las crendenciales del usuario para guardar los audios con sus otros datos. 
+- Mostrar los audios. 
 
 
 Maybe, cambiar contraseña.

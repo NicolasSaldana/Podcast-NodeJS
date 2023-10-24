@@ -19,7 +19,9 @@ app.set('views', path.join(__dirname, "/views"))
 app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.static(__dirname + 'href="/css/style.css">'));
+app.use("/Audios", express.static(path.join(__dirname, "/Audios")));
 app.use("/ImagenesGuardadas", express.static(path.join(__dirname, "/ImagenesGuardadas")));
+app.use("/AudiosFavoritos", express.static(path.join(__dirname, "/AudiosFavoritos")));
 app.use("/templates", express.static(path.join(__dirname, "/templates")));
 
 // Configurar la conexión a la base de datos
@@ -108,26 +110,64 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
 });
 
 app.get('/favoritos', (req, res) => {
-  // if (req.session.isLoggedIn === true) {
-  //   res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
-  //   // console.log(req.session);
-  // } else {
-  //   res.redirect('/prelogin');
-  // }
   if (req.session.isLoggedIn === true) {
     const imagenPath = path.join(__dirname, req.session.imagen);
-
-    // Verificar si la imagen existe en la carpeta
-    fs.access(imagenPath, fs.constants.F_OK, (err) => {
+    const folderPath = path.resolve(__dirname, 'AudiosFavoritos/');
+    fs.readdir(folderPath, (err, files) => {
       if (err) {
-        return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault });
+        console.error('Error al leer la carpeta de audios:', err);
       } else {
-        return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
+        const audios = files.map(file => `/AudiosFavoritos/${path.basename(file)}`);
+        console.log("Audios guardados:" + files);
+        let imagenExists = false;
+        // Verificar si la imagen existe en la carpeta
+        if (fs.existsSync(imagenPath)) {
+          imagenExists = true;
+        }
+        if (files.length === 0) {
+          console.log("No hay archivos guardados");
+          if (imagenExists) {
+            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: [] });
+          } else {
+            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: [] });
+          }
+        } else {
+          if (imagenExists) {
+            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audios });
+          } else {
+            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: audios });
+          }
+        }
       }
     });
   } else {
     res.redirect('/prelogin');
   }
+});
+
+app.post('/favoritos', (req, res) => {
+  const audioSrc = req.body.audioSrc;
+  // console.log(audioSrc);
+
+  // Obtiene el nombre del archivo de audio de la ruta
+  const fileName = path.basename(audioSrc);
+
+  // Define la ruta de la carpeta donde se guardarán los archivos de audio
+  const folderPath = path.join(__dirname, 'AudiosFavoritos');
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
+
+  fs.copyFile(audioSrc, path.join(folderPath, fileName), (err) => {
+    if (err) {
+      console.error('Error al guardar el archivo de audio:', err);
+      res.status(500).json('Error al guardar el archivo de audio');
+    } else {
+      console.log('Archivo de audio guardado exitosamente');
+      res.status(200).json('Archivo de audio guardado exitosamente');
+    }
+  });
 });
 
 app.get('/logout', (req, res) => {
@@ -259,7 +299,7 @@ app.post('/prelogin', (req, res) => {
       })
     } else {
       console.log('El correo electrónico no existe en la base de datos');
-      return res.status(200).json({ message: 'Correo electrónico incorrecto' });
+      return res.status(200).json({ message: 'El correo electrónico no existe en la base de datos' });
     }
   });
 
