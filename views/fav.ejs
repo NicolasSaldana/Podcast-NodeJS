@@ -194,7 +194,8 @@
                                     <span class="strike-text"></span>
                                 </div>
                                 <div class="d-flex flex-column mt-4">
-                                    <button class="btn btn-outline-primary btn-sm mt-2" type="button">Eliminar
+                                    <button class="btn btn-outline-primary btn-sm mt-2"
+                                        data-audio-src="<%= audios[i] %>" type="button">Eliminar
                                         de
                                         favoritos</button>
                                 </div>
@@ -234,7 +235,38 @@
     <script src="/templates/js/FormContact.js"></script>
     <script src="/templates/js/subscribe.js"></script>
     <script src="assets/js/main.js"></script>
+    <script>
+        // Obtener referencia al botón de eliminar
+        const deleteButtons = document.querySelectorAll('.btn-outline-primary');
 
+        // Agregar un controlador de eventos para cada botón de eliminar
+        deleteButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                // Obtener el ID del audio correspondiente al botón de eliminar
+                const audioSrc = button.getAttribute("data-audio-src");
+                fetch("/delete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ audioSrc }),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Audio eliminado con éxito');
+                            // Realizar cualquier acción adicional después de eliminar el audio
+                        } else {
+                            console.error('Error al eliminar el audio:', response.status);
+                            // Realizar cualquier acción adicional en caso de error
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud fetch:', error);
+                        // Realizar cualquier acción adicional en caso de error de red
+                    });
+            });
+        });
+    </script>
 </body>
 
 </html>

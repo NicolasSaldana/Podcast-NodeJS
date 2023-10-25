@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.static(__dirname + 'href="/css/style.css">'));
 app.use("/Audios", express.static(path.join(__dirname, "/Audios")));
 app.use("/ImagenesGuardadas", express.static(path.join(__dirname, "/ImagenesGuardadas")));
-app.use("/AudiosFavoritos", express.static(path.join(__dirname, "/AudiosFavoritos")));
+// app.use("/AudiosFavoritos", express.static(path.join(__dirname, "/AudiosFavoritos")));
 app.use("/templates", express.static(path.join(__dirname, "/templates")));
 
 // Configurar la conexión a la base de datos
@@ -48,7 +48,7 @@ app.use(session({
   }
 }));
 
-//Multer
+//Multer  imagenes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'ImagenesGuardadas/'); // Carpeta de destino para las imágenes subidas
@@ -58,6 +58,7 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
+
 
 app.get('/', (req, res) => {
   return res.render('index.ejs');
@@ -110,30 +111,37 @@ app.post('/configuraciones', upload.single('imagen'), (req, res) => {
 });
 
 app.get('/favoritos', (req, res) => {
-  // if (req.session.isLoggedIn === true) {
-  //   res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
-  //   // console.log(req.session);
-  // } else {
-  //   res.redirect('/prelogin');
-  // }
   if (req.session.isLoggedIn === true) {
-    const imagenPath = path.join(__dirname, req.session.imagen);
-    const folderPath = path.resolve(__dirname, 'AudiosFavoritos/');
-    fs.readdir(folderPath, (err, files) => {
+    const email = req.session.user.email;
+
+    // Realizar una consulta de selección para obtener los audios guardados
+    const dbQuery = "SELECT ruta_audio FROM favoritos2 WHERE email = ?";
+    const dbValues = [email];
+
+    db.query(dbQuery, dbValues, (err, result) => {
       if (err) {
-        console.error('Error al leer la carpeta de audios:', err);
+        console.error('Error al obtener los audios guardados:', err);
+        return res.status(500).json('Error al obtener los audios guardados');
       } else {
-        // Devuelve la lista de archivos como respuesta en formato JSON
-        const audios = files.map(file => `/AudiosFavoritos/${path.basename(file)}`);
-        console.log("Audios guardados:" + files);
-        // Verificar si la imagen existe en la carpeta
-        fs.access(imagenPath, fs.constants.F_OK, (err) => {
-          if (err) {
-            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: audios });
-          } else {
-            return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audios });
-          }
-        });
+        // Obtener las rutas de los audios desde el resultado de la consulta
+        const audioPaths = result.map(row => row.ruta_audio);
+        console.log("Audios guardados:" + audioPaths);
+
+        if (audioPaths.length === 0) {
+          // No hay audios guardados
+          return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: [] });
+        } else {
+          const imagenPath = path.join(__dirname, req.session.imagen);
+
+          // Verificar si la imagen existe en la carpeta
+          fs.access(imagenPath, fs.constants.F_OK, (err) => {
+            if (err) {
+              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: audioPaths });
+            } else {
+              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audioPaths });
+            }
+          });
+        }
       }
     });
   } else {
@@ -143,35 +151,34 @@ app.get('/favoritos', (req, res) => {
 
 app.post('/favoritos', (req, res) => {
   const audioSrc = req.body.audioSrc;
-  console.log(audioSrc);
+  console.log("Guardado: " + audioSrc);
+  const email = req.session.user.email;
 
-  // Obtiene el nombre del archivo de audio de la ruta
-  const fileName = path.basename(audioSrc);
+  const checkQuery = "SELECT * FROM favoritos2 WHERE email = ? AND ruta_audio = ?";
+  const checkValues = [email, audioSrc];
 
-  // Define la ruta de la carpeta donde se guardarán los archivos de audio
-  const folderPath = path.join(__dirname, 'AudiosFavoritos');
-
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
-  }
-
-  fs.copyFile(audioSrc, path.join(folderPath, fileName), (err) => {
+  // Verificar si el audio ya está guardado en la tabla de favoritos
+  db.query(checkQuery, checkValues, (err, result) => {
     if (err) {
-      console.error('Error al guardar el archivo de audio:', err);
-      res.status(500).json('Error al guardar el archivo de audio');
+      console.error('Error al verificar en la tabla de favoritos:', err);
+      return res.status(500).json('Error al verificar en la tabla de favoritos');
+    } else if (result.length > 0) {
+      console.log('El audio ya está guardado en la tabla de favoritos');
+      return res.status(200).json('El audio ya está guardado en la tabla de favoritos');
     } else {
-      console.log('Archivo de audio guardado exitosamente');
-      res.status(200).json('Archivo de audio guardado exitosamente');
-      // fs.readdir(folderPath, (err, files) => {
-      //   if (err) {
-      //     console.error('Error al leer la carpeta de audios:', err);
-      //     res.status(500).json( 'Error al obtener la lista de audios' );
-      //   } else {
-      //     // Devuelve la lista de archivos como respuesta en formato JSON
-      //     req.session.audios = files
-      //     console.log(req.session.audios);
-      //   }
-      // });
+      // El audio no está guardado, realizar la inserción
+      const dbQuery = "INSERT INTO favoritos2 (email, ruta_audio) VALUES (?, ?)";
+      const dbValues = [email, audioSrc];
+
+      db.query(dbQuery, dbValues, (err, result) => {
+        if (err) {
+          console.error('Error al guardar en la tabla de favoritos:', err);
+          return res.status(500).json('Error al guardar en la tabla de favoritos');
+        } else {
+          console.log('Archivo de audio guardado en la tabla');
+          return res.status(200).json('Archivo de audio guardado exitosamente');
+        }
+      });
     }
   });
 });
@@ -540,6 +547,27 @@ app.post("/subemail", (req, res) => {
   console.log("working")
 });
 
+app.post('/delete', (req, res) => {
+  if (req.session.isLoggedIn === true) {
+    const email = req.session.user.email;
+    const audioSrc = req.body.audioSrc;
+
+    // Realizar una consulta de eliminación para eliminar el audio guardado
+    const dbQuery = "DELETE FROM favoritos2 WHERE email = ? AND ruta_audio = ?";
+    const dbValues = [email, audioSrc];
+
+    db.query(dbQuery, dbValues, (err, result) => {
+      if (err) {
+        console.error('Error al eliminar el audio guardado:', err);
+        return res.status(500).json('Error al eliminar el audio guardado');
+      } else {
+        console.log('Audio eliminado con éxito');
+      }
+    });
+  } else {
+    res.redirect('/prelogin');
+  }
+});
 
 //Conectar a la BD
 db.connect((err) => {
