@@ -66,9 +66,8 @@ Hacer el sistema de favoritos:
 - Verificar si ya estan guardados los audios.✔️
 - Boton para eliminar el audio de la BD. ✔️
 - Pagina/alerta por si no hay audios favoritos. ✔️
-
-- Localizar las crendenciales del usuario para guardar los audios con sus otros datos. 
-- Mostrar los audios. 
+- Guardar los nombres de los podcast.✔️
+- Mostrar los audios. ✔️
 
 
 Maybe, cambiar contraseña.
