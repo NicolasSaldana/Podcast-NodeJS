@@ -59,6 +59,7 @@ Si no existe la foto poner una default.✔️
 Si la imagen se borra de la carpeta no enviar nada al ejs. ✔️
 
 Mover los estilos y scripts a un archivo aparte ✔️
+Verificar en la BD si el contenido del atributo ruta_imagen fue borrado.
 
 Hacer el sistema de favoritos:
 - Guardar los audios en la BD.✔️ 

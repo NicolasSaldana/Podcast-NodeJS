@@ -114,31 +114,31 @@ app.get('/favoritos', (req, res) => {
   if (req.session.isLoggedIn === true) {
     const email = req.session.user.email;
 
-    // consulta de selección para obtener los audios guardados
-    const dbQuery = "SELECT ruta_audio FROM favoritos2 WHERE email = ?";
+    const dbQuery = "SELECT ruta_audio, nombre_audio FROM favoritos2 WHERE email = ?";
     const dbValues = [email];
-
+    
+    // consulta de selección para obtener los audios guardados
     db.query(dbQuery, dbValues, (err, result) => {
       if (err) {
         console.error('Error al obtener los audios guardados:', err);
         return res.status(500).json('Error al obtener los audios guardados');
       } else {
-        // Obtener las rutas de los audios desde el resultado de la consulta
-        const audioPaths = result.map(row => row.ruta_audio);
-        console.log("Audios guardados:" + audioPaths);
+        // Obtener las rutas y los nombres de los audios desde el resultado de la consulta
+        const audioData = result.map(row => ({ ruta: row.ruta_audio, nombre: row.nombre_audio }));
+        console.log("Audios guardados:", audioData);
 
-        if (audioPaths.length === 0) {
+        if (audioData.length === 0) {
           // No hay audios guardados
-          return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: [] });
+          return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audioData });
         } else {
           const imagenPath = path.join(__dirname, req.session.imagen);
 
           // Verificar si la imagen existe en la carpeta
           fs.access(imagenPath, fs.constants.F_OK, (err) => {
             if (err) {
-              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault, audios: audioPaths });
+              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: imgDefault,  audioData });
             } else {
-              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen, audios: audioPaths });
+              return res.render('fav.ejs', { nombre: req.session.nombre, imagen: req.session.imagen,  audioData });
             }
           });
         }
@@ -150,9 +150,11 @@ app.get('/favoritos', (req, res) => {
 });
 
 app.post('/favoritos', (req, res) => {
-  const audioSrc = req.body.audioSrc;
-  console.log("Guardado: " + audioSrc);
+  const audioSrc = req.body.src;
+  const audioName = req.body.name;
+
   const email = req.session.user.email;
+  // console.log("Email: " + email);
 
   const checkQuery = "SELECT * FROM favoritos2 WHERE email = ? AND ruta_audio = ?";
   const checkValues = [email, audioSrc];
@@ -166,8 +168,8 @@ app.post('/favoritos', (req, res) => {
       console.log('El audio ya está guardado en la tabla de favoritos');
       return res.status(200).json('El audio ya está guardado en la tabla de favoritos');
     } else {
-      const dbQuery = "INSERT INTO favoritos2 (email, ruta_audio) VALUES (?, ?)";
-      const dbValues = [email, audioSrc];
+      const dbQuery = "INSERT INTO favoritos2 (email, ruta_audio , nombre_audio) VALUES (?, ?, ?)";
+      const dbValues = [email, audioSrc, audioName];
 
       db.query(dbQuery, dbValues, (err, result) => {
         if (err) {
@@ -533,7 +535,7 @@ app.post('/delete', (req, res) => {
     const email = req.session.user.email;
     const audioSrc = req.body.audioSrc;
 
-    
+
     const dbQuery = "DELETE FROM favoritos2 WHERE email = ? AND ruta_audio = ?";
     const dbValues = [email, audioSrc];
 

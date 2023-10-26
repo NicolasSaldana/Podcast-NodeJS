@@ -211,7 +211,7 @@
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span>
                                 </div>
                                 <button class="favorite-button"
-                                    data-audio-src="Audios/6b0e8070833c3e2af7323a8b0cac.mp3"><i class="bi bi-star"></i>
+                                    data-audio-src="Audios/primero capo.m4a" data-audio-name="Episodio 01: Primer podcast."><i class="bi bi-star"></i>
                                 </button>
                                 <div class="player">
                                     <audio preload="none" controls style="max-width: 100%">
@@ -228,10 +228,10 @@
                                 <img src="#" alt="">
                             </div>
                             <div class="text">
-                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 02: ...</h3>
+                                <h3 class="font-weight-light" style="color: #3ca59d;">Episodio 02: Hablemos de Indenpendiente.</h3>
                                 <div class="text-white mb-3"><span class="text-black-opacity-05"><small>...<span
                                                 class="sep">/</span><span class="sep">/</span> ... </small></span></div>
-                                <button class="favorite-button" data-audio-src="Audios/0ff22a15475e27fcc200f6d618a9-orig.wav"><i class="bi bi-star"></i></button>
+                                <button class="favorite-button" data-audio-src="Audios/segundo capo.m4a" data-audio-name="Episodio 02: Hablemos de Independiente."><i class="bi bi-star"></i></button>
                                 <div class="player">
                                     <audio id="player2" preload="none" controls style="max-width: 100%">
                                         <source src="/Audios/segundo capo.m4a" type="audio/mp3">
@@ -424,12 +424,13 @@
             button.addEventListener("click", function () {
                 // URL  de audio desde el atributo data-audio-src
                 const audioSrc = button.getAttribute("data-audio-src");
+                const audioName = button.getAttribute("data-audio-name");
                 fetch("/favoritos", {
                     method: "POST", 
                     headers: {
                         "Content-Type": "application/json", 
                     },
-                    body: JSON.stringify({ audioSrc }), 
+                    body: JSON.stringify({ src: audioSrc, name: audioName }), 
                 })
                     .then(response => {
                         if (response.ok) {
