@@ -61,9 +61,10 @@ Si la imagen se borra de la carpeta no enviar nada al ejs. ✔️
 Mover los estilos y scripts a un archivo aparte ✔️
 
 Hacer el sistema de favoritos:
-- Primero guardar los audios en la carpeta.✔️ 
-- Hacer pagina para subir los archi de audio.
-- Guardar los audios en la BD. 
+- Guardar los audios en la BD.✔️ 
+- Verificar si ya estan guardados los audios.✔️
+- Boton para eliminar el audio de la BD. ✔️
+- Pagina/alerta por si no hay audios favoritos. ✔️
 
 - Localizar las crendenciales del usuario para guardar los audios con sus otros datos. 
 - Mostrar los audios. 

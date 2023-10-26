@@ -252,16 +252,14 @@
                     body: JSON.stringify({ audioSrc }),
                 })
                     .then(response => {
-                        if (response.ok) {
-                            console.log('Audio eliminado con éxito');
-                            // Realizar cualquier acción adicional después de eliminar el audio
+                        if (response.redirected) {
+                            window.location.href = response.url;
                         } else {
-                            console.error('Error al eliminar el audio:', response.status);
-                            // Realizar cualquier acción adicional en caso de error
+                            return response.json();
                         }
                     })
                     .catch(error => {
-                        console.error('Error en la solicitud fetch:', error);
+                        console.error(error);
                         // Realizar cualquier acción adicional en caso de error de red
                     });
             });

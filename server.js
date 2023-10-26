@@ -114,7 +114,7 @@ app.get('/favoritos', (req, res) => {
   if (req.session.isLoggedIn === true) {
     const email = req.session.user.email;
 
-    // Realizar una consulta de selección para obtener los audios guardados
+    // consulta de selección para obtener los audios guardados
     const dbQuery = "SELECT ruta_audio FROM favoritos2 WHERE email = ?";
     const dbValues = [email];
 
@@ -166,7 +166,6 @@ app.post('/favoritos', (req, res) => {
       console.log('El audio ya está guardado en la tabla de favoritos');
       return res.status(200).json('El audio ya está guardado en la tabla de favoritos');
     } else {
-      // El audio no está guardado, realizar la inserción
       const dbQuery = "INSERT INTO favoritos2 (email, ruta_audio) VALUES (?, ?)";
       const dbValues = [email, audioSrc];
 
@@ -207,12 +206,6 @@ app.get('/loged', (req, res) => {
 })
 
 app.get('/about', (req, res) => {
-  // if (req.session.isLoggedIn === true) {
-  //   res.render('about.ejs', { nombre: req.session.nombre, imagen: req.session.imagen });
-  //   // console.log(req.session);
-  // } else {
-  //   res.sendFile(path.join(__dirname, "templates/about.html"));
-  // }
   if (req.session.isLoggedIn === true) {
     const imagenPath = path.join(__dirname, req.session.imagen);
     fs.access(imagenPath, fs.constants.F_OK, (err) => {
@@ -276,18 +269,9 @@ app.post('/prelogin', (req, res) => {
     const nombre = result[0].nombre;
     let imagen = result[0].ruta_imagen;
 
-    // if (imagen === null) {
-    //   imagen = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
-    // }
-
     if (count > 0) {
       //Si existe el correo en la BD comparo las contraseñas. La hasheada en la BD con la ingresada.
       bcrypt.compare(contraseña, storedPassword, (err, isMatch) => {
-        // if (err) {
-        //   console.error('Error al verificar la contraseñas: ', err);
-        //   return res.status(500).json({ message: 'Error al verificar la contraseñas en la base de datos.' });
-        // }
-
         if (isMatch) {
           console.log('La contraseña es correcta');
           req.session.isLoggedIn = true;
@@ -300,8 +284,6 @@ app.post('/prelogin', (req, res) => {
             nombre: nombre,
             email: email
           }
-          // console.log('WELCOME');
-          // console.log(nombre);
           console.log("login" + imagen);
           return res.redirect('/loged');
 
@@ -316,7 +298,6 @@ app.post('/prelogin', (req, res) => {
     }
   });
 
-  // console.log(email, contraseña);
 })
 
 app.get('/preregister', (req, res) => {
@@ -552,7 +533,7 @@ app.post('/delete', (req, res) => {
     const email = req.session.user.email;
     const audioSrc = req.body.audioSrc;
 
-    // Realizar una consulta de eliminación para eliminar el audio guardado
+    
     const dbQuery = "DELETE FROM favoritos2 WHERE email = ? AND ruta_audio = ?";
     const dbValues = [email, audioSrc];
 
@@ -562,6 +543,7 @@ app.post('/delete', (req, res) => {
         return res.status(500).json('Error al eliminar el audio guardado');
       } else {
         console.log('Audio eliminado con éxito');
+        return res.redirect('/favoritos');
       }
     });
   } else {
